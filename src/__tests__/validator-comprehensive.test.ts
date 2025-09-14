@@ -796,7 +796,7 @@ describe("SCXML Validator Comprehensive Tests", () => {
 
       // Create root state with nested levels
       const rootState = StateBuilder.create("root").initial("level0");
-      
+
       // Create all level states as siblings (no initial attributes needed for siblings)
       for (let i = 0; i < 50; i++) {
         const levelState = StateBuilder.create(`level${i}`).addTransition(

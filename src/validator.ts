@@ -1,9 +1,15 @@
-import { SCXMLDocument, SCXMLElement, StateElement, ParallelElement, FinalElement } from './types';
+import {
+  SCXMLDocument,
+  SCXMLElement,
+  StateElement,
+  ParallelElement,
+  FinalElement,
+} from "./types";
 
 export interface ValidationError {
   message: string;
   path: string;
-  severity: 'error' | 'warning';
+  severity: "error" | "warning";
 }
 
 export class SCXMLValidator {
@@ -13,36 +19,54 @@ export class SCXMLValidator {
   validate(document: SCXMLDocument): ValidationError[] {
     this.errors = [];
     this.dataIds = new Set();
-    this.validateScxmlElement(document.scxml, 'scxml');
+    this.validateScxmlElement(document.scxml, "scxml");
     return this.errors;
   }
 
-  private addError(message: string, path: string, severity: 'error' | 'warning' = 'error'): void {
+  private addError(
+    message: string,
+    path: string,
+    severity: "error" | "warning" = "error"
+  ): void {
     this.errors.push({ message, path, severity });
   }
 
   private validateScxmlElement(element: SCXMLElement, path: string): void {
     if (!element.state && !element.parallel && !element.final) {
-      this.addError('SCXML document must contain at least one state, parallel, or final element', path);
+      this.addError(
+        "SCXML document must contain at least one state, parallel, or final element",
+        path
+      );
     }
 
     const stateIds = new Set<string>();
-    
+
     element.state?.forEach((state, index) => {
       this.validateStateElement(state, `${path}.state[${index}]`, stateIds);
     });
 
     element.parallel?.forEach((parallel, index) => {
-      this.validateParallelElement(parallel, `${path}.parallel[${index}]`, stateIds);
+      this.validateParallelElement(
+        parallel,
+        `${path}.parallel[${index}]`,
+        stateIds
+      );
     });
 
     element.final?.forEach((finalState, index) => {
-      this.validateFinalElement(finalState, `${path}.final[${index}]`, stateIds);
+      this.validateFinalElement(
+        finalState,
+        `${path}.final[${index}]`,
+        stateIds
+      );
     });
 
     if (element.initial) {
       if (!stateIds.has(element.initial)) {
-        this.addError(`Initial state "${element.initial}" does not exist`, path);
+        this.addError(
+          `Initial state "${element.initial}" does not exist`,
+          path
+        );
       }
     }
 
@@ -51,9 +75,13 @@ export class SCXMLValidator {
     }
   }
 
-  private validateStateElement(state: StateElement, path: string, stateIds: Set<string>): void {
+  private validateStateElement(
+    state: StateElement,
+    path: string,
+    stateIds: Set<string>
+  ): void {
     if (!state.id) {
-      this.addError('State must have an id attribute', path);
+      this.addError("State must have an id attribute", path);
       return;
     }
 
@@ -65,7 +93,7 @@ export class SCXMLValidator {
 
     // First collect child state IDs
     const childStateIds = new Set<string>();
-    
+
     state.state?.forEach((childState) => {
       if (childState.id) {
         childStateIds.add(childState.id);
@@ -87,23 +115,41 @@ export class SCXMLValidator {
     // Validate initial state reference
     if (state.initial) {
       if (childStateIds.size === 0) {
-        this.addError(`Initial state "${state.initial}" does not exist in state "${state.id}" (no child states)`, path);
+        this.addError(
+          `Initial state "${state.initial}" does not exist in state "${state.id}" (no child states)`,
+          path
+        );
       } else if (!childStateIds.has(state.initial)) {
-        this.addError(`Initial state "${state.initial}" does not exist in state "${state.id}"`, path);
+        this.addError(
+          `Initial state "${state.initial}" does not exist in state "${state.id}"`,
+          path
+        );
       }
     }
 
     // Now validate child elements
     state.state?.forEach((childState, index) => {
-      this.validateStateElement(childState, `${path}.state[${index}]`, stateIds);
+      this.validateStateElement(
+        childState,
+        `${path}.state[${index}]`,
+        stateIds
+      );
     });
 
     state.parallel?.forEach((parallel, index) => {
-      this.validateParallelElement(parallel, `${path}.parallel[${index}]`, stateIds);
+      this.validateParallelElement(
+        parallel,
+        `${path}.parallel[${index}]`,
+        stateIds
+      );
     });
 
     state.final?.forEach((finalState, index) => {
-      this.validateFinalElement(finalState, `${path}.final[${index}]`, stateIds);
+      this.validateFinalElement(
+        finalState,
+        `${path}.final[${index}]`,
+        stateIds
+      );
     });
 
     if (state.transition) {
@@ -121,9 +167,13 @@ export class SCXMLValidator {
     });
   }
 
-  private validateParallelElement(parallel: ParallelElement, path: string, stateIds: Set<string>): void {
+  private validateParallelElement(
+    parallel: ParallelElement,
+    path: string,
+    stateIds: Set<string>
+  ): void {
     if (!parallel.id) {
-      this.addError('Parallel element must have an id attribute', path);
+      this.addError("Parallel element must have an id attribute", path);
       return;
     }
 
@@ -134,19 +184,31 @@ export class SCXMLValidator {
     }
 
     // Count all child states (state + parallel)
-    const childCount = (parallel.state?.length || 0) + (parallel.parallel?.length || 0);
+    const childCount =
+      (parallel.state?.length || 0) + (parallel.parallel?.length || 0);
     if (childCount < 2) {
-      this.addError('Parallel element must contain at least two child states', path);
+      this.addError(
+        "Parallel element must contain at least two child states",
+        path
+      );
     }
 
     const childStateIds = new Set<string>();
 
     parallel.state?.forEach((childState, index) => {
-      this.validateStateElement(childState, `${path}.state[${index}]`, childStateIds);
+      this.validateStateElement(
+        childState,
+        `${path}.state[${index}]`,
+        childStateIds
+      );
     });
 
     parallel.parallel?.forEach((childParallel, index) => {
-      this.validateParallelElement(childParallel, `${path}.parallel[${index}]`, childStateIds);
+      this.validateParallelElement(
+        childParallel,
+        `${path}.parallel[${index}]`,
+        childStateIds
+      );
     });
 
     if (parallel.transition) {
@@ -160,9 +222,13 @@ export class SCXMLValidator {
     }
   }
 
-  private validateFinalElement(finalState: FinalElement, path: string, stateIds: Set<string>): void {
+  private validateFinalElement(
+    finalState: FinalElement,
+    path: string,
+    stateIds: Set<string>
+  ): void {
     if (!finalState.id) {
-      this.addError('Final state must have an id attribute', path);
+      this.addError("Final state must have an id attribute", path);
       return;
     }
 
@@ -174,12 +240,19 @@ export class SCXMLValidator {
   }
 
   private validateTransition(transition: any, path: string): void {
-    if (transition.type && !['internal', 'external'].includes(transition.type)) {
+    if (
+      transition.type &&
+      !["internal", "external"].includes(transition.type)
+    ) {
       this.addError(`Invalid transition type: ${transition.type}`, path);
     }
 
     if (!transition.event && !transition.cond && !transition.target) {
-      this.addError('Transition must have at least one of: event, cond, or target', path, 'warning');
+      this.addError(
+        "Transition must have at least one of: event, cond, or target",
+        path,
+        "warning"
+      );
     }
   }
 
@@ -187,9 +260,15 @@ export class SCXMLValidator {
     if (datamodel.data) {
       datamodel.data.forEach((data: any, index: number) => {
         if (!data.id) {
-          this.addError('Data element must have an id attribute', `${path}.data[${index}]`);
+          this.addError(
+            "Data element must have an id attribute",
+            `${path}.data[${index}]`
+          );
         } else if (this.dataIds.has(data.id)) {
-          this.addError(`Duplicate data id: ${data.id}`, `${path}.data[${index}]`);
+          this.addError(
+            `Duplicate data id: ${data.id}`,
+            `${path}.data[${index}]`
+          );
         } else {
           this.dataIds.add(data.id);
         }
@@ -199,11 +278,14 @@ export class SCXMLValidator {
 
   private validateHistory(history: any, path: string): void {
     if (!history.id) {
-      this.addError('History element must have an id attribute', path);
+      this.addError("History element must have an id attribute", path);
     }
 
-    if (!history.type || !['shallow', 'deep'].includes(history.type)) {
-      this.addError('History element must have a type attribute of "shallow" or "deep"', path);
+    if (!history.type || !["shallow", "deep"].includes(history.type)) {
+      this.addError(
+        'History element must have a type attribute of "shallow" or "deep"',
+        path
+      );
     }
   }
 }

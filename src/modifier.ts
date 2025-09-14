@@ -10,8 +10,8 @@ import {
   DataModelElement,
   DataElement,
   InvokeElement,
-  HistoryElement
-} from './types';
+  HistoryElement,
+} from "./types";
 
 export class SCXMLModifier {
   private document: SCXMLDocument;
@@ -53,44 +53,71 @@ export class SCXMLModifier {
 
   removeState(stateId: string): this {
     if (this.document.scxml.state) {
-      this.document.scxml.state = this.document.scxml.state.filter(s => s.id !== stateId);
+      this.document.scxml.state = this.document.scxml.state.filter(
+        (s) => s.id !== stateId
+      );
       this.removeStateRecursive(this.document.scxml.state, stateId);
     }
     return this;
   }
 
   private removeStateRecursive(states: StateElement[], stateId: string): void {
-    states.forEach(state => {
+    states.forEach((state) => {
       if (state.state) {
-        state.state = state.state.filter(s => s.id !== stateId);
+        state.state = state.state.filter((s) => s.id !== stateId);
         this.removeStateRecursive(state.state, stateId);
       }
     });
   }
 
-  updateState(stateId: string, updater: (state: StateElement) => StateElement): this {
-    this.updateStateRecursive(this.document.scxml.state || [], stateId, updater);
-    this.updateStateInParallels(this.document.scxml.parallel || [], stateId, updater);
+  updateState(
+    stateId: string,
+    updater: (state: StateElement) => StateElement
+  ): this {
+    this.updateStateRecursive(
+      this.document.scxml.state || [],
+      stateId,
+      updater
+    );
+    this.updateStateInParallels(
+      this.document.scxml.parallel || [],
+      stateId,
+      updater
+    );
     return this;
   }
 
-  private updateStateRecursive(states: StateElement[], stateId: string, updater: (state: StateElement) => StateElement): boolean {
+  private updateStateRecursive(
+    states: StateElement[],
+    stateId: string,
+    updater: (state: StateElement) => StateElement
+  ): boolean {
     for (let i = 0; i < states.length; i++) {
       if (states[i].id === stateId) {
         states[i] = updater(JSON.parse(JSON.stringify(states[i])));
         return true;
       }
-      if (states[i].state && this.updateStateRecursive(states[i].state!, stateId, updater)) {
+      if (
+        states[i].state &&
+        this.updateStateRecursive(states[i].state!, stateId, updater)
+      ) {
         return true;
       }
-      if (states[i].parallel && this.updateStateInParallels(states[i].parallel!, stateId, updater)) {
+      if (
+        states[i].parallel &&
+        this.updateStateInParallels(states[i].parallel!, stateId, updater)
+      ) {
         return true;
       }
     }
     return false;
   }
 
-  private updateStateInParallels(parallels: ParallelElement[], stateId: string, updater: (state: StateElement) => StateElement): boolean {
+  private updateStateInParallels(
+    parallels: ParallelElement[],
+    stateId: string,
+    updater: (state: StateElement) => StateElement
+  ): boolean {
     for (let i = 0; i < parallels.length; i++) {
       // Check if this parallel element matches the stateId
       if (parallels[i].id === stateId) {
@@ -99,10 +126,16 @@ export class SCXMLModifier {
         parallels[i] = updatedParallel as any;
         return true;
       }
-      if (parallels[i].state && this.updateStateRecursive(parallels[i].state!, stateId, updater)) {
+      if (
+        parallels[i].state &&
+        this.updateStateRecursive(parallels[i].state!, stateId, updater)
+      ) {
         return true;
       }
-      if (parallels[i].parallel && this.updateStateInParallels(parallels[i].parallel!, stateId, updater)) {
+      if (
+        parallels[i].parallel &&
+        this.updateStateInParallels(parallels[i].parallel!, stateId, updater)
+      ) {
         return true;
       }
     }
@@ -110,11 +143,16 @@ export class SCXMLModifier {
   }
 
   findState(stateId: string): StateElement | undefined {
-    return this.findStateRecursive(this.document.scxml.state || [], stateId) ||
-           this.findStateInParallels(this.document.scxml.parallel || [], stateId);
+    return (
+      this.findStateRecursive(this.document.scxml.state || [], stateId) ||
+      this.findStateInParallels(this.document.scxml.parallel || [], stateId)
+    );
   }
 
-  private findStateRecursive(states: StateElement[], stateId: string): StateElement | undefined {
+  private findStateRecursive(
+    states: StateElement[],
+    stateId: string
+  ): StateElement | undefined {
     for (const state of states) {
       if (state.id === stateId) {
         return state;
@@ -131,7 +169,10 @@ export class SCXMLModifier {
     return undefined;
   }
 
-  private findStateInParallels(parallels: ParallelElement[], stateId: string): StateElement | undefined {
+  private findStateInParallels(
+    parallels: ParallelElement[],
+    stateId: string
+  ): StateElement | undefined {
     for (const parallel of parallels) {
       // Check if this parallel element matches the stateId
       if (parallel.id === stateId) {
@@ -151,7 +192,7 @@ export class SCXMLModifier {
   }
 
   addTransitionToState(stateId: string, transition: TransitionElement): this {
-    return this.updateState(stateId, state => {
+    return this.updateState(stateId, (state) => {
       if (!state.transition) {
         state.transition = [];
       }
@@ -160,19 +201,26 @@ export class SCXMLModifier {
     });
   }
 
-  removeTransitionFromState(stateId: string, predicate: (transition: TransitionElement) => boolean): this {
-    return this.updateState(stateId, state => {
+  removeTransitionFromState(
+    stateId: string,
+    predicate: (transition: TransitionElement) => boolean
+  ): this {
+    return this.updateState(stateId, (state) => {
       if (state.transition) {
-        state.transition = state.transition.filter(t => !predicate(t));
+        state.transition = state.transition.filter((t) => !predicate(t));
       }
       return state;
     });
   }
 
-  updateTransitionInState(stateId: string, predicate: (transition: TransitionElement) => boolean, updater: (transition: TransitionElement) => TransitionElement): this {
-    return this.updateState(stateId, state => {
+  updateTransitionInState(
+    stateId: string,
+    predicate: (transition: TransitionElement) => boolean,
+    updater: (transition: TransitionElement) => TransitionElement
+  ): this {
+    return this.updateState(stateId, (state) => {
       if (state.transition) {
-        state.transition = state.transition.map(t => 
+        state.transition = state.transition.map((t) =>
           predicate(t) ? updater(JSON.parse(JSON.stringify(t))) : t
         );
       }
@@ -181,7 +229,7 @@ export class SCXMLModifier {
   }
 
   addOnEntryToState(stateId: string, onEntry: OnEntryElement): this {
-    return this.updateState(stateId, state => {
+    return this.updateState(stateId, (state) => {
       if (!state.onentry) {
         state.onentry = [];
       }
@@ -191,7 +239,7 @@ export class SCXMLModifier {
   }
 
   addOnExitToState(stateId: string, onExit: OnExitElement): this {
-    return this.updateState(stateId, state => {
+    return this.updateState(stateId, (state) => {
       if (!state.onexit) {
         state.onexit = [];
       }
@@ -201,7 +249,7 @@ export class SCXMLModifier {
   }
 
   addInvokeToState(stateId: string, invoke: InvokeElement): this {
-    return this.updateState(stateId, state => {
+    return this.updateState(stateId, (state) => {
       if (!state.invoke) {
         state.invoke = [];
       }
@@ -211,7 +259,7 @@ export class SCXMLModifier {
   }
 
   setStateDataModel(stateId: string, dataModel: DataModelElement): this {
-    return this.updateState(stateId, state => {
+    return this.updateState(stateId, (state) => {
       state.datamodel = JSON.parse(JSON.stringify(dataModel));
       return state;
     });
@@ -224,28 +272,37 @@ export class SCXMLModifier {
     if (!this.document.scxml.datamodel_element.data) {
       this.document.scxml.datamodel_element.data = [];
     }
-    this.document.scxml.datamodel_element.data.push(JSON.parse(JSON.stringify(data)));
+    this.document.scxml.datamodel_element.data.push(
+      JSON.parse(JSON.stringify(data))
+    );
     return this;
   }
 
-  updateDataInModel(dataId: string, updater: (data: DataElement) => DataElement): this {
+  updateDataInModel(
+    dataId: string,
+    updater: (data: DataElement) => DataElement
+  ): this {
     if (this.document.scxml.datamodel_element?.data) {
-      this.document.scxml.datamodel_element.data = this.document.scxml.datamodel_element.data.map(d =>
-        d.id === dataId ? updater(JSON.parse(JSON.stringify(d))) : d
-      );
+      this.document.scxml.datamodel_element.data =
+        this.document.scxml.datamodel_element.data.map((d) =>
+          d.id === dataId ? updater(JSON.parse(JSON.stringify(d))) : d
+        );
     }
     return this;
   }
 
   removeDataFromModel(dataId: string): this {
     if (this.document.scxml.datamodel_element?.data) {
-      this.document.scxml.datamodel_element.data = this.document.scxml.datamodel_element.data.filter(d => d.id !== dataId);
+      this.document.scxml.datamodel_element.data =
+        this.document.scxml.datamodel_element.data.filter(
+          (d) => d.id !== dataId
+        );
     }
     return this;
   }
 
   renameState(oldId: string, newId: string): this {
-    this.updateState(oldId, state => {
+    this.updateState(oldId, (state) => {
       state.id = newId;
       return state;
     });
@@ -256,7 +313,10 @@ export class SCXMLModifier {
     return this;
   }
 
-  private updateAllTransitionTargets(oldTarget: string, newTarget: string): void {
+  private updateAllTransitionTargets(
+    oldTarget: string,
+    newTarget: string
+  ): void {
     const updateTransitionTarget = (transition: any) => {
       if (transition.target) {
         // Handle exact matches
@@ -264,13 +324,22 @@ export class SCXMLModifier {
           transition.target = newTarget;
         }
         // Handle hierarchical path references (e.g., "../../level1alt" when renaming "level1alt")
-        else if (transition.target.endsWith('/' + oldTarget)) {
-          transition.target = transition.target.replace('/' + oldTarget, '/' + newTarget);
+        else if (transition.target.endsWith("/" + oldTarget)) {
+          transition.target = transition.target.replace(
+            "/" + oldTarget,
+            "/" + newTarget
+          );
         }
         // Handle path that is exactly the old target after navigation (e.g., "../level1alt")
-        else if (transition.target.endsWith(oldTarget) && 
-                 (transition.target.endsWith('/' + oldTarget) || transition.target.startsWith('../'))) {
-          const prefix = transition.target.substring(0, transition.target.length - oldTarget.length);
+        else if (
+          transition.target.endsWith(oldTarget) &&
+          (transition.target.endsWith("/" + oldTarget) ||
+            transition.target.startsWith("../"))
+        ) {
+          const prefix = transition.target.substring(
+            0,
+            transition.target.length - oldTarget.length
+          );
           transition.target = prefix + newTarget;
         }
       }
@@ -303,11 +372,11 @@ export class SCXMLModifier {
 
   private walkAllStates(callback: (state: StateElement) => void): void {
     const walk = (states: StateElement[]) => {
-      states.forEach(state => {
+      states.forEach((state) => {
         callback(state);
         if (state.state) walk(state.state);
         if (state.parallel) {
-          state.parallel.forEach(p => {
+          state.parallel.forEach((p) => {
             if (p.state) walk(p.state);
           });
         }
@@ -319,12 +388,14 @@ export class SCXMLModifier {
     }
   }
 
-  private walkAllParallels(callback: (parallel: ParallelElement) => void): void {
+  private walkAllParallels(
+    callback: (parallel: ParallelElement) => void
+  ): void {
     const walk = (parallels: ParallelElement[]) => {
-      parallels.forEach(parallel => {
+      parallels.forEach((parallel) => {
         callback(parallel);
         if (parallel.state) {
-          parallel.state.forEach(s => {
+          parallel.state.forEach((s) => {
             if (s.parallel) walk(s.parallel);
           });
         }
@@ -339,19 +410,19 @@ export class SCXMLModifier {
 
   getAllStateIds(): string[] {
     const ids: string[] = [];
-    
+
     this.walkAllStates((state) => {
       ids.push(state.id);
     });
 
     if (this.document.scxml.parallel) {
-      this.document.scxml.parallel.forEach(parallel => {
+      this.document.scxml.parallel.forEach((parallel) => {
         ids.push(parallel.id);
       });
     }
 
     if (this.document.scxml.final) {
-      this.document.scxml.final.forEach(final => {
+      this.document.scxml.final.forEach((final) => {
         ids.push(final.id);
       });
     }
