@@ -1,6 +1,13 @@
 # SCXML TypeScript Parser
 
+[![CI](https://github.com/caweinshenker/scxml-js/actions/workflows/ci.yml/badge.svg)](https://github.com/caweinshenker/scxml-js/actions/workflows/ci.yml)
+[![Documentation](https://github.com/caweinshenker/scxml-js/actions/workflows/docs.yml/badge.svg)](https://github.com/caweinshenker/scxml-js/actions/workflows/docs.yml)
+[![npm version](https://badge.fury.io/js/%40scxml%2Fparser.svg)](https://badge.fury.io/js/%40scxml%2Fparser)
+[![Coverage Status](https://coveralls.io/repos/github/caweinshenker/scxml-js/badge.svg?branch=main)](https://coveralls.io/github/caweinshenker/scxml-js?branch=main)
+
 A comprehensive TypeScript library for parsing, creating, modifying, validating, and serializing SCXML (State Chart XML) documents with full W3C specification support.
+
+📖 **[View Full Documentation](https://caweinshenker.github.io/scxml-js/)**
 
 ## Features
 
