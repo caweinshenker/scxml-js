@@ -1,6 +1,6 @@
 # Class: OnEntryBuilder
 
-Defined in: [builder.ts:431](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L431)
+Defined in: [builder.ts:431](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L431)
 
 Fluent API builders for creating SCXML documents programmatically.
 
@@ -13,7 +13,7 @@ SCXML documents from scratch.
 
 > **new OnEntryBuilder**(): `OnEntryBuilder`
 
-Defined in: [builder.ts:434](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L434)
+Defined in: [builder.ts:434](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L434)
 
 #### Returns
 
@@ -25,7 +25,7 @@ Defined in: [builder.ts:434](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addAssign**(`assign`): `this`
 
-Defined in: [builder.ts:458](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L458)
+Defined in: [builder.ts:458](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L458)
 
 #### Parameters
 
@@ -43,7 +43,7 @@ Defined in: [builder.ts:458](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addLog**(`log`): `this`
 
-Defined in: [builder.ts:450](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L450)
+Defined in: [builder.ts:450](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L450)
 
 #### Parameters
 
@@ -61,7 +61,7 @@ Defined in: [builder.ts:450](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addRaise**(`raise`): `this`
 
-Defined in: [builder.ts:442](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L442)
+Defined in: [builder.ts:442](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L442)
 
 #### Parameters
 
@@ -79,7 +79,7 @@ Defined in: [builder.ts:442](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addScript**(`script`): `this`
 
-Defined in: [builder.ts:474](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L474)
+Defined in: [builder.ts:474](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L474)
 
 #### Parameters
 
@@ -97,7 +97,7 @@ Defined in: [builder.ts:474](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addSend**(`send`): `this`
 
-Defined in: [builder.ts:466](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L466)
+Defined in: [builder.ts:466](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L466)
 
 #### Parameters
 
@@ -115,7 +115,7 @@ Defined in: [builder.ts:466](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **build**(): [`OnEntryElement`](../interfaces/OnEntryElement.md)
 
-Defined in: [builder.ts:482](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L482)
+Defined in: [builder.ts:482](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L482)
 
 #### Returns
 
@@ -127,7 +127,7 @@ Defined in: [builder.ts:482](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > `static` **create**(): `OnEntryBuilder`
 
-Defined in: [builder.ts:438](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L438)
+Defined in: [builder.ts:438](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L438)
 
 #### Returns
 

@@ -1,6 +1,6 @@
 # Interface: ValidationError
 
-Defined in: [validator.ts:3](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/validator.ts#L3)
+Defined in: [validator.ts:9](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/validator.ts#L9)
 
 Comprehensive validation for SCXML document structure and semantics.
 
@@ -10,7 +10,7 @@ Comprehensive validation for SCXML document structure and semantics.
 
 > **message**: `string`
 
-Defined in: [validator.ts:4](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/validator.ts#L4)
+Defined in: [validator.ts:10](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/validator.ts#L10)
 
 ***
 
@@ -18,7 +18,7 @@ Defined in: [validator.ts:4](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **path**: `string`
 
-Defined in: [validator.ts:5](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/validator.ts#L5)
+Defined in: [validator.ts:11](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/validator.ts#L11)
 
 ***
 
@@ -26,4 +26,4 @@ Defined in: [validator.ts:5](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **severity**: `"error"` \| `"warning"`
 
-Defined in: [validator.ts:6](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/validator.ts#L6)
+Defined in: [validator.ts:12](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/validator.ts#L12)

@@ -1,6 +1,6 @@
 # Interface: SCXMLElement
 
-Defined in: [types.ts:5](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L5)
+Defined in: [types.ts:5](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L5)
 
 ## Properties
 
@@ -8,7 +8,7 @@ Defined in: [types.ts:5](https://github.com/caweinshenker/sxcml-js/blob/957847bd
 
 > `optional` **datamodel**: `string`
 
-Defined in: [types.ts:9](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L9)
+Defined in: [types.ts:9](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L9)
 
 ***
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:9](https://github.com/caweinshenker/sxcml-js/blob/957847bd
 
 > `optional` **datamodel\_element**: [`DataModelElement`](DataModelElement.md)
 
-Defined in: [types.ts:14](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L14)
+Defined in: [types.ts:14](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L14)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [types.ts:14](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **final**: [`FinalElement`](FinalElement.md)[]
 
-Defined in: [types.ts:13](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L13)
+Defined in: [types.ts:13](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L13)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [types.ts:13](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **initial**: `string`
 
-Defined in: [types.ts:6](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L6)
+Defined in: [types.ts:6](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L6)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [types.ts:6](https://github.com/caweinshenker/sxcml-js/blob/957847bd
 
 > `optional` **name**: `string`
 
-Defined in: [types.ts:7](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L7)
+Defined in: [types.ts:7](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L7)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [types.ts:7](https://github.com/caweinshenker/sxcml-js/blob/957847bd
 
 > `optional` **parallel**: [`ParallelElement`](ParallelElement.md)[]
 
-Defined in: [types.ts:12](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L12)
+Defined in: [types.ts:12](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L12)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [types.ts:12](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **script**: [`ScriptElement`](ScriptElement.md)[]
 
-Defined in: [types.ts:15](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L15)
+Defined in: [types.ts:15](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L15)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [types.ts:15](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **state**: [`StateElement`](StateElement.md)[]
 
-Defined in: [types.ts:11](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L11)
+Defined in: [types.ts:11](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L11)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [types.ts:11](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **version**: `string`
 
-Defined in: [types.ts:8](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L8)
+Defined in: [types.ts:8](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L8)
 
 ***
 
@@ -80,4 +80,4 @@ Defined in: [types.ts:8](https://github.com/caweinshenker/sxcml-js/blob/957847bd
 
 > `optional` **xmlns**: `string`
 
-Defined in: [types.ts:10](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L10)
+Defined in: [types.ts:10](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L10)

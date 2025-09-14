@@ -2,4 +2,4 @@
 
 > `const` **VERSION**: `"0.1.0"` = `'0.1.0'`
 
-Defined in: [index.ts:284](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/index.ts#L284)
+Defined in: [index.ts:284](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/index.ts#L284)

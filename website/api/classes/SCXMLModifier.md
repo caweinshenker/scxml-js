@@ -1,6 +1,6 @@
 # Class: SCXMLModifier
 
-Defined in: [modifier.ts:16](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L16)
+Defined in: [modifier.ts:16](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L16)
 
 API for programmatically modifying existing SCXML documents.
 
@@ -10,7 +10,7 @@ API for programmatically modifying existing SCXML documents.
 
 > **new SCXMLModifier**(`document`): `SCXMLModifier`
 
-Defined in: [modifier.ts:19](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L19)
+Defined in: [modifier.ts:19](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L19)
 
 #### Parameters
 
@@ -28,7 +28,7 @@ Defined in: [modifier.ts:19](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addDataToModel**(`data`): `this`
 
-Defined in: [modifier.ts:208](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L208)
+Defined in: [modifier.ts:268](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L268)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [modifier.ts:208](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **addInvokeToState**(`stateId`, `invoke`): `this`
 
-Defined in: [modifier.ts:191](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L191)
+Defined in: [modifier.ts:251](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L251)
 
 #### Parameters
 
@@ -68,7 +68,7 @@ Defined in: [modifier.ts:191](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **addOnEntryToState**(`stateId`, `onEntry`): `this`
 
-Defined in: [modifier.ts:171](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L171)
+Defined in: [modifier.ts:231](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L231)
 
 #### Parameters
 
@@ -90,7 +90,7 @@ Defined in: [modifier.ts:171](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **addOnExitToState**(`stateId`, `onExit`): `this`
 
-Defined in: [modifier.ts:181](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L181)
+Defined in: [modifier.ts:241](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L241)
 
 #### Parameters
 
@@ -112,7 +112,7 @@ Defined in: [modifier.ts:181](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **addState**(`state`): `this`
 
-Defined in: [modifier.ts:46](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L46)
+Defined in: [modifier.ts:46](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L46)
 
 #### Parameters
 
@@ -130,7 +130,7 @@ Defined in: [modifier.ts:46](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addTransitionToState**(`stateId`, `transition`): `this`
 
-Defined in: [modifier.ts:141](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L141)
+Defined in: [modifier.ts:194](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L194)
 
 #### Parameters
 
@@ -152,7 +152,7 @@ Defined in: [modifier.ts:141](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **clone**(): `SCXMLModifier`
 
-Defined in: [modifier.ts:339](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L339)
+Defined in: [modifier.ts:433](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L433)
 
 #### Returns
 
@@ -164,7 +164,7 @@ Defined in: [modifier.ts:339](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **findState**(`stateId`): `undefined` \| [`StateElement`](../interfaces/StateElement.md)
 
-Defined in: [modifier.ts:105](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L105)
+Defined in: [modifier.ts:145](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L145)
 
 #### Parameters
 
@@ -182,7 +182,7 @@ Defined in: [modifier.ts:105](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **getAllStateIds**(): `string`[]
 
-Defined in: [modifier.ts:317](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L317)
+Defined in: [modifier.ts:411](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L411)
 
 #### Returns
 
@@ -194,7 +194,7 @@ Defined in: [modifier.ts:317](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **getDocument**(): [`SCXMLDocument`](../interfaces/SCXMLDocument.md)
 
-Defined in: [modifier.ts:27](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L27)
+Defined in: [modifier.ts:27](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L27)
 
 #### Returns
 
@@ -206,7 +206,7 @@ Defined in: [modifier.ts:27](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **removeDataFromModel**(`dataId`): `this`
 
-Defined in: [modifier.ts:228](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L228)
+Defined in: [modifier.ts:294](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L294)
 
 #### Parameters
 
@@ -224,7 +224,7 @@ Defined in: [modifier.ts:228](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **removeState**(`stateId`): `this`
 
-Defined in: [modifier.ts:54](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L54)
+Defined in: [modifier.ts:54](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L54)
 
 #### Parameters
 
@@ -242,7 +242,7 @@ Defined in: [modifier.ts:54](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **removeTransitionFromState**(`stateId`, `predicate`): `this`
 
-Defined in: [modifier.ts:151](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L151)
+Defined in: [modifier.ts:204](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L204)
 
 #### Parameters
 
@@ -264,7 +264,7 @@ Defined in: [modifier.ts:151](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **renameState**(`oldId`, `newId`): `this`
 
-Defined in: [modifier.ts:235](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L235)
+Defined in: [modifier.ts:304](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L304)
 
 #### Parameters
 
@@ -286,7 +286,7 @@ Defined in: [modifier.ts:235](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **setDatamodel**(`datamodel`): `this`
 
-Defined in: [modifier.ts:41](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L41)
+Defined in: [modifier.ts:41](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L41)
 
 #### Parameters
 
@@ -304,7 +304,7 @@ Defined in: [modifier.ts:41](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **setInitial**(`initial`): `this`
 
-Defined in: [modifier.ts:36](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L36)
+Defined in: [modifier.ts:36](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L36)
 
 #### Parameters
 
@@ -322,7 +322,7 @@ Defined in: [modifier.ts:36](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **setName**(`name`): `this`
 
-Defined in: [modifier.ts:31](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L31)
+Defined in: [modifier.ts:31](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L31)
 
 #### Parameters
 
@@ -340,7 +340,7 @@ Defined in: [modifier.ts:31](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **setStateDataModel**(`stateId`, `dataModel`): `this`
 
-Defined in: [modifier.ts:201](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L201)
+Defined in: [modifier.ts:261](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L261)
 
 #### Parameters
 
@@ -362,7 +362,7 @@ Defined in: [modifier.ts:201](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **updateDataInModel**(`dataId`, `updater`): `this`
 
-Defined in: [modifier.ts:219](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L219)
+Defined in: [modifier.ts:281](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L281)
 
 #### Parameters
 
@@ -384,7 +384,7 @@ Defined in: [modifier.ts:219](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > **updateState**(`stateId`, `updater`): `this`
 
-Defined in: [modifier.ts:71](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L71)
+Defined in: [modifier.ts:73](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L73)
 
 #### Parameters
 
@@ -406,7 +406,7 @@ Defined in: [modifier.ts:71](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **updateTransitionInState**(`stateId`, `predicate`, `updater`): `this`
 
-Defined in: [modifier.ts:160](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L160)
+Defined in: [modifier.ts:216](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L216)
 
 #### Parameters
 
@@ -432,7 +432,7 @@ Defined in: [modifier.ts:160](https://github.com/caweinshenker/sxcml-js/blob/957
 
 > `static` **from**(`document`): `SCXMLModifier`
 
-Defined in: [modifier.ts:23](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/modifier.ts#L23)
+Defined in: [modifier.ts:23](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/modifier.ts#L23)
 
 #### Parameters
 

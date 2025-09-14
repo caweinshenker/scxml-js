@@ -1,6 +1,6 @@
 # Interface: DataModelElement
 
-Defined in: [types.ts:94](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L94)
+Defined in: [types.ts:94](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L94)
 
 ## Properties
 
@@ -8,4 +8,4 @@ Defined in: [types.ts:94](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **data**: [`DataElement`](DataElement.md)[]
 
-Defined in: [types.ts:95](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L95)
+Defined in: [types.ts:95](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L95)

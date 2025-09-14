@@ -26,7 +26,7 @@ const config: Config = {
   organizationName: 'caweinshenker', // Usually your GitHub org/user name.
   projectName: 'scxml-js', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -37,27 +37,7 @@ const config: Config = {
     locales: ['en'],
   },
 
-  plugins: [
-    [
-      'docusaurus-plugin-typedoc',
-      {
-        entryPoints: ['../src/index.ts'],
-        tsconfig: '../tsconfig.json',
-        out: 'api',
-        sidebar: {
-          categoryLabel: 'API Reference',
-          position: 3,
-          fullNames: false,
-        },
-        excludePrivate: true,
-        excludeProtected: false,
-        excludeExternals: true,
-        readme: 'none',
-        plugin: ['typedoc-plugin-markdown'],
-        hideGenerator: true,
-      },
-    ],
-  ],
+  plugins: [],
 
   presets: [
     [

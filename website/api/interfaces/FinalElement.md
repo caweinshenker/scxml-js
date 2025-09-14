@@ -1,6 +1,6 @@
 # Interface: FinalElement
 
-Defined in: [types.ts:44](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L44)
+Defined in: [types.ts:44](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L44)
 
 ## Properties
 
@@ -8,7 +8,7 @@ Defined in: [types.ts:44](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **donedata**: [`DoneDataElement`](DoneDataElement.md)
 
-Defined in: [types.ts:48](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L48)
+Defined in: [types.ts:48](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L48)
 
 ***
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:48](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > **id**: `string`
 
-Defined in: [types.ts:45](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L45)
+Defined in: [types.ts:45](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L45)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [types.ts:45](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **onentry**: [`OnEntryElement`](OnEntryElement.md)[]
 
-Defined in: [types.ts:46](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L46)
+Defined in: [types.ts:46](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L46)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [types.ts:46](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **onexit**: [`OnExitElement`](OnExitElement.md)[]
 
-Defined in: [types.ts:47](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L47)
+Defined in: [types.ts:47](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L47)

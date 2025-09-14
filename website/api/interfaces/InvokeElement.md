@@ -1,6 +1,6 @@
 # Interface: InvokeElement
 
-Defined in: [types.ts:105](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L105)
+Defined in: [types.ts:105](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L105)
 
 ## Properties
 
@@ -8,7 +8,7 @@ Defined in: [types.ts:105](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **autoforward**: `boolean`
 
-Defined in: [types.ts:111](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L111)
+Defined in: [types.ts:111](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L111)
 
 ***
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:111](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **content**: [`ContentElement`](ContentElement.md)
 
-Defined in: [types.ts:114](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L114)
+Defined in: [types.ts:114](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L114)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [types.ts:114](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **finalize**: [`FinalizeElement`](FinalizeElement.md)
 
-Defined in: [types.ts:113](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L113)
+Defined in: [types.ts:113](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L113)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [types.ts:113](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **id**: `string`
 
-Defined in: [types.ts:108](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L108)
+Defined in: [types.ts:108](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L108)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [types.ts:108](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **idlocation**: `string`
 
-Defined in: [types.ts:109](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L109)
+Defined in: [types.ts:109](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L109)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [types.ts:109](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **param**: [`ParamElement`](ParamElement.md)[]
 
-Defined in: [types.ts:112](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L112)
+Defined in: [types.ts:112](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L112)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [types.ts:112](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **src**: `string`
 
-Defined in: [types.ts:107](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L107)
+Defined in: [types.ts:107](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L107)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [types.ts:107](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **srcexpr**: `string`
 
-Defined in: [types.ts:110](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L110)
+Defined in: [types.ts:110](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L110)
 
 ***
 
@@ -72,4 +72,4 @@ Defined in: [types.ts:110](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **type**: `string`
 
-Defined in: [types.ts:106](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L106)
+Defined in: [types.ts:106](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L106)

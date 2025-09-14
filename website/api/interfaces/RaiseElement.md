@@ -1,6 +1,6 @@
 # Interface: RaiseElement
 
-Defined in: [types.ts:144](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L144)
+Defined in: [types.ts:144](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L144)
 
 ## Properties
 
@@ -8,4 +8,4 @@ Defined in: [types.ts:144](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > **event**: `string`
 
-Defined in: [types.ts:145](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L145)
+Defined in: [types.ts:145](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L145)

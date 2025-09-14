@@ -1,6 +1,6 @@
 # Interface: ParallelElement
 
-Defined in: [types.ts:32](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L32)
+Defined in: [types.ts:32](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L32)
 
 ## Properties
 
@@ -8,7 +8,7 @@ Defined in: [types.ts:32](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **datamodel**: [`DataModelElement`](DataModelElement.md)
 
-Defined in: [types.ts:40](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L40)
+Defined in: [types.ts:40](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L40)
 
 ***
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:40](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **history**: [`HistoryElement`](HistoryElement.md)[]
 
-Defined in: [types.ts:41](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L41)
+Defined in: [types.ts:41](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L41)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [types.ts:41](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > **id**: `string`
 
-Defined in: [types.ts:33](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L33)
+Defined in: [types.ts:33](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L33)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [types.ts:33](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **invoke**: [`InvokeElement`](InvokeElement.md)[]
 
-Defined in: [types.ts:39](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L39)
+Defined in: [types.ts:39](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L39)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [types.ts:39](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **onentry**: [`OnEntryElement`](OnEntryElement.md)[]
 
-Defined in: [types.ts:36](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L36)
+Defined in: [types.ts:36](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L36)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [types.ts:36](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **onexit**: [`OnExitElement`](OnExitElement.md)[]
 
-Defined in: [types.ts:37](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L37)
+Defined in: [types.ts:37](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L37)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [types.ts:37](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **parallel**: `ParallelElement`[]
 
-Defined in: [types.ts:35](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L35)
+Defined in: [types.ts:35](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L35)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [types.ts:35](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **state**: [`StateElement`](StateElement.md)[]
 
-Defined in: [types.ts:34](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L34)
+Defined in: [types.ts:34](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L34)
 
 ***
 
@@ -72,4 +72,4 @@ Defined in: [types.ts:34](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **transition**: [`TransitionElement`](TransitionElement.md)[]
 
-Defined in: [types.ts:38](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L38)
+Defined in: [types.ts:38](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L38)

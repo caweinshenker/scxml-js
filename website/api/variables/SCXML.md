@@ -2,7 +2,7 @@
 
 > `const` **SCXML**: `object`
 
-Defined in: [index.ts:138](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/index.ts#L138)
+Defined in: [index.ts:138](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/index.ts#L138)
 
 Convenience object providing easy access to all SCXML operations.
 

@@ -1,6 +1,6 @@
 # Class: DataModelBuilder
 
-Defined in: [builder.ts:322](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L322)
+Defined in: [builder.ts:322](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L322)
 
 Fluent API builders for creating SCXML documents programmatically.
 
@@ -13,7 +13,7 @@ SCXML documents from scratch.
 
 > **new DataModelBuilder**(): `DataModelBuilder`
 
-Defined in: [builder.ts:325](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L325)
+Defined in: [builder.ts:325](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L325)
 
 #### Returns
 
@@ -25,7 +25,7 @@ Defined in: [builder.ts:325](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addData**(`data`): `this`
 
-Defined in: [builder.ts:333](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L333)
+Defined in: [builder.ts:333](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L333)
 
 #### Parameters
 
@@ -43,7 +43,7 @@ Defined in: [builder.ts:333](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **build**(): [`DataModelElement`](../interfaces/DataModelElement.md)
 
-Defined in: [builder.ts:341](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L341)
+Defined in: [builder.ts:341](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L341)
 
 #### Returns
 
@@ -55,7 +55,7 @@ Defined in: [builder.ts:341](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > `static` **create**(): `DataModelBuilder`
 
-Defined in: [builder.ts:329](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L329)
+Defined in: [builder.ts:329](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L329)
 
 #### Returns
 

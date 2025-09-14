@@ -1,6 +1,6 @@
 # Interface: ElseIfElement
 
-Defined in: [types.ts:162](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L162)
+Defined in: [types.ts:162](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L162)
 
 ## Properties
 
@@ -8,7 +8,7 @@ Defined in: [types.ts:162](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **assign**: [`AssignElement`](AssignElement.md)[]
 
-Defined in: [types.ts:168](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L168)
+Defined in: [types.ts:168](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L168)
 
 ***
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:168](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **cancel**: [`CancelElement`](CancelElement.md)[]
 
-Defined in: [types.ts:170](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L170)
+Defined in: [types.ts:170](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L170)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [types.ts:170](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > **cond**: `string`
 
-Defined in: [types.ts:163](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L163)
+Defined in: [types.ts:163](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L163)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [types.ts:163](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **foreach**: [`ForEachElement`](ForEachElement.md)[]
 
-Defined in: [types.ts:166](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L166)
+Defined in: [types.ts:166](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L166)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [types.ts:166](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **if**: [`IfElement`](IfElement.md)[]
 
-Defined in: [types.ts:165](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L165)
+Defined in: [types.ts:165](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L165)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [types.ts:165](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **log**: [`LogElement`](LogElement.md)[]
 
-Defined in: [types.ts:167](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L167)
+Defined in: [types.ts:167](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L167)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [types.ts:167](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **raise**: [`RaiseElement`](RaiseElement.md)[]
 
-Defined in: [types.ts:164](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L164)
+Defined in: [types.ts:164](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L164)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [types.ts:164](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **script**: [`ScriptElement`](ScriptElement.md)[]
 
-Defined in: [types.ts:171](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L171)
+Defined in: [types.ts:171](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L171)
 
 ***
 
@@ -72,4 +72,4 @@ Defined in: [types.ts:171](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **send**: [`SendElement`](SendElement.md)[]
 
-Defined in: [types.ts:169](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L169)
+Defined in: [types.ts:169](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L169)

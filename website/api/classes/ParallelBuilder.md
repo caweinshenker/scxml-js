@@ -1,6 +1,6 @@
 # Class: ParallelBuilder
 
-Defined in: [builder.ts:190](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L190)
+Defined in: [builder.ts:190](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L190)
 
 Fluent API builders for creating SCXML documents programmatically.
 
@@ -13,7 +13,7 @@ SCXML documents from scratch.
 
 > **new ParallelBuilder**(`id`): `ParallelBuilder`
 
-Defined in: [builder.ts:193](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L193)
+Defined in: [builder.ts:193](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L193)
 
 #### Parameters
 
@@ -31,7 +31,7 @@ Defined in: [builder.ts:193](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addOnEntry**(`onEntry`): `this`
 
-Defined in: [builder.ts:225](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L225)
+Defined in: [builder.ts:225](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L225)
 
 #### Parameters
 
@@ -49,7 +49,7 @@ Defined in: [builder.ts:225](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addOnExit**(`onExit`): `this`
 
-Defined in: [builder.ts:233](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L233)
+Defined in: [builder.ts:233](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L233)
 
 #### Parameters
 
@@ -67,7 +67,7 @@ Defined in: [builder.ts:233](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addParallel**(`childParallel`): `this`
 
-Defined in: [builder.ts:209](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L209)
+Defined in: [builder.ts:209](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L209)
 
 #### Parameters
 
@@ -85,7 +85,7 @@ Defined in: [builder.ts:209](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addState**(`state`): `this`
 
-Defined in: [builder.ts:201](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L201)
+Defined in: [builder.ts:201](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L201)
 
 #### Parameters
 
@@ -103,7 +103,7 @@ Defined in: [builder.ts:201](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addTransition**(`transition`): `this`
 
-Defined in: [builder.ts:217](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L217)
+Defined in: [builder.ts:217](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L217)
 
 #### Parameters
 
@@ -121,7 +121,7 @@ Defined in: [builder.ts:217](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **build**(): [`ParallelElement`](../interfaces/ParallelElement.md)
 
-Defined in: [builder.ts:241](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L241)
+Defined in: [builder.ts:241](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L241)
 
 #### Returns
 
@@ -133,7 +133,7 @@ Defined in: [builder.ts:241](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > `static` **create**(`id`): `ParallelBuilder`
 
-Defined in: [builder.ts:197](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L197)
+Defined in: [builder.ts:197](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L197)
 
 #### Parameters
 

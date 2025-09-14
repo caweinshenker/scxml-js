@@ -1,6 +1,6 @@
 # Interface: DataElement
 
-Defined in: [types.ts:98](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L98)
+Defined in: [types.ts:98](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L98)
 
 ## Properties
 
@@ -8,7 +8,7 @@ Defined in: [types.ts:98](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **content**: `string`
 
-Defined in: [types.ts:102](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L102)
+Defined in: [types.ts:102](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L102)
 
 ***
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:102](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > `optional` **expr**: `string`
 
-Defined in: [types.ts:101](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L101)
+Defined in: [types.ts:101](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L101)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [types.ts:101](https://github.com/caweinshenker/sxcml-js/blob/957847
 
 > **id**: `string`
 
-Defined in: [types.ts:99](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L99)
+Defined in: [types.ts:99](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L99)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [types.ts:99](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **src**: `string`
 
-Defined in: [types.ts:100](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L100)
+Defined in: [types.ts:100](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L100)

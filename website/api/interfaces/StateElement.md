@@ -1,6 +1,6 @@
 # Interface: StateElement
 
-Defined in: [types.ts:18](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L18)
+Defined in: [types.ts:18](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L18)
 
 ## Properties
 
@@ -8,7 +8,7 @@ Defined in: [types.ts:18](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **datamodel**: [`DataModelElement`](DataModelElement.md)
 
-Defined in: [types.ts:28](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L28)
+Defined in: [types.ts:28](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L28)
 
 ***
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:28](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **final**: [`FinalElement`](FinalElement.md)[]
 
-Defined in: [types.ts:23](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L23)
+Defined in: [types.ts:23](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L23)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [types.ts:23](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **history**: [`HistoryElement`](HistoryElement.md)[]
 
-Defined in: [types.ts:29](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L29)
+Defined in: [types.ts:29](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L29)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [types.ts:29](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > **id**: `string`
 
-Defined in: [types.ts:19](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L19)
+Defined in: [types.ts:19](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L19)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [types.ts:19](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **initial**: `string`
 
-Defined in: [types.ts:20](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L20)
+Defined in: [types.ts:20](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L20)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [types.ts:20](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **invoke**: [`InvokeElement`](InvokeElement.md)[]
 
-Defined in: [types.ts:27](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L27)
+Defined in: [types.ts:27](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L27)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [types.ts:27](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **onentry**: [`OnEntryElement`](OnEntryElement.md)[]
 
-Defined in: [types.ts:24](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L24)
+Defined in: [types.ts:24](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L24)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [types.ts:24](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **onexit**: [`OnExitElement`](OnExitElement.md)[]
 
-Defined in: [types.ts:25](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L25)
+Defined in: [types.ts:25](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L25)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [types.ts:25](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **parallel**: [`ParallelElement`](ParallelElement.md)[]
 
-Defined in: [types.ts:22](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L22)
+Defined in: [types.ts:22](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L22)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [types.ts:22](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **state**: `StateElement`[]
 
-Defined in: [types.ts:21](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L21)
+Defined in: [types.ts:21](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L21)
 
 ***
 
@@ -88,4 +88,4 @@ Defined in: [types.ts:21](https://github.com/caweinshenker/sxcml-js/blob/957847b
 
 > `optional` **transition**: [`TransitionElement`](TransitionElement.md)[]
 
-Defined in: [types.ts:26](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/types.ts#L26)
+Defined in: [types.ts:26](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/types.ts#L26)

@@ -1,6 +1,6 @@
 # Class: OnExitBuilder
 
-Defined in: [builder.ts:487](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L487)
+Defined in: [builder.ts:487](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L487)
 
 Fluent API builders for creating SCXML documents programmatically.
 
@@ -13,7 +13,7 @@ SCXML documents from scratch.
 
 > **new OnExitBuilder**(): `OnExitBuilder`
 
-Defined in: [builder.ts:490](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L490)
+Defined in: [builder.ts:490](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L490)
 
 #### Returns
 
@@ -25,7 +25,7 @@ Defined in: [builder.ts:490](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addAssign**(`assign`): `this`
 
-Defined in: [builder.ts:514](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L514)
+Defined in: [builder.ts:514](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L514)
 
 #### Parameters
 
@@ -43,7 +43,7 @@ Defined in: [builder.ts:514](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addLog**(`log`): `this`
 
-Defined in: [builder.ts:506](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L506)
+Defined in: [builder.ts:506](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L506)
 
 #### Parameters
 
@@ -61,7 +61,7 @@ Defined in: [builder.ts:506](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addRaise**(`raise`): `this`
 
-Defined in: [builder.ts:498](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L498)
+Defined in: [builder.ts:498](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L498)
 
 #### Parameters
 
@@ -79,7 +79,7 @@ Defined in: [builder.ts:498](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addScript**(`script`): `this`
 
-Defined in: [builder.ts:530](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L530)
+Defined in: [builder.ts:530](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L530)
 
 #### Parameters
 
@@ -97,7 +97,7 @@ Defined in: [builder.ts:530](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addSend**(`send`): `this`
 
-Defined in: [builder.ts:522](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L522)
+Defined in: [builder.ts:522](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L522)
 
 #### Parameters
 
@@ -115,7 +115,7 @@ Defined in: [builder.ts:522](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **build**(): [`OnExitElement`](../interfaces/OnExitElement.md)
 
-Defined in: [builder.ts:538](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L538)
+Defined in: [builder.ts:538](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L538)
 
 #### Returns
 
@@ -127,7 +127,7 @@ Defined in: [builder.ts:538](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > `static` **create**(): `OnExitBuilder`
 
-Defined in: [builder.ts:494](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L494)
+Defined in: [builder.ts:494](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L494)
 
 #### Returns
 

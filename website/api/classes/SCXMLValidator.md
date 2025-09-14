@@ -1,6 +1,6 @@
 # Class: SCXMLValidator
 
-Defined in: [validator.ts:9](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/validator.ts#L9)
+Defined in: [validator.ts:15](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/validator.ts#L15)
 
 Comprehensive validation for SCXML document structure and semantics.
 
@@ -20,7 +20,7 @@ Comprehensive validation for SCXML document structure and semantics.
 
 > **validate**(`document`): [`ValidationError`](../interfaces/ValidationError.md)[]
 
-Defined in: [validator.ts:12](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/validator.ts#L12)
+Defined in: [validator.ts:19](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/validator.ts#L19)
 
 #### Parameters
 

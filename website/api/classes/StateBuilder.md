@@ -1,6 +1,6 @@
 # Class: StateBuilder
 
-Defined in: [builder.ts:100](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L100)
+Defined in: [builder.ts:100](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L100)
 
 Fluent API builders for creating SCXML documents programmatically.
 
@@ -13,7 +13,7 @@ SCXML documents from scratch.
 
 > **new StateBuilder**(`id`): `StateBuilder`
 
-Defined in: [builder.ts:103](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L103)
+Defined in: [builder.ts:103](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L103)
 
 #### Parameters
 
@@ -31,7 +31,7 @@ Defined in: [builder.ts:103](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addDataModel**(`dataModel`): `this`
 
-Defined in: [builder.ts:180](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L180)
+Defined in: [builder.ts:180](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L180)
 
 #### Parameters
 
@@ -49,7 +49,7 @@ Defined in: [builder.ts:180](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addFinal**(`final`): `this`
 
-Defined in: [builder.ts:132](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L132)
+Defined in: [builder.ts:132](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L132)
 
 #### Parameters
 
@@ -67,7 +67,7 @@ Defined in: [builder.ts:132](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addHistory**(`history`): `this`
 
-Defined in: [builder.ts:172](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L172)
+Defined in: [builder.ts:172](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L172)
 
 #### Parameters
 
@@ -85,7 +85,7 @@ Defined in: [builder.ts:172](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addInvoke**(`invoke`): `this`
 
-Defined in: [builder.ts:164](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L164)
+Defined in: [builder.ts:164](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L164)
 
 #### Parameters
 
@@ -103,7 +103,7 @@ Defined in: [builder.ts:164](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addOnEntry**(`onEntry`): `this`
 
-Defined in: [builder.ts:148](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L148)
+Defined in: [builder.ts:148](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L148)
 
 #### Parameters
 
@@ -121,7 +121,7 @@ Defined in: [builder.ts:148](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addOnExit**(`onExit`): `this`
 
-Defined in: [builder.ts:156](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L156)
+Defined in: [builder.ts:156](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L156)
 
 #### Parameters
 
@@ -139,7 +139,7 @@ Defined in: [builder.ts:156](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addParallel**(`parallel`): `this`
 
-Defined in: [builder.ts:124](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L124)
+Defined in: [builder.ts:124](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L124)
 
 #### Parameters
 
@@ -157,7 +157,7 @@ Defined in: [builder.ts:124](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addState**(`childState`): `this`
 
-Defined in: [builder.ts:116](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L116)
+Defined in: [builder.ts:116](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L116)
 
 #### Parameters
 
@@ -175,7 +175,7 @@ Defined in: [builder.ts:116](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addTransition**(`transition`): `this`
 
-Defined in: [builder.ts:140](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L140)
+Defined in: [builder.ts:140](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L140)
 
 #### Parameters
 
@@ -193,7 +193,7 @@ Defined in: [builder.ts:140](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **build**(): [`StateElement`](../interfaces/StateElement.md)
 
-Defined in: [builder.ts:185](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L185)
+Defined in: [builder.ts:185](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L185)
 
 #### Returns
 
@@ -205,7 +205,7 @@ Defined in: [builder.ts:185](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **initial**(`initial`): `this`
 
-Defined in: [builder.ts:111](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L111)
+Defined in: [builder.ts:111](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L111)
 
 #### Parameters
 
@@ -223,7 +223,7 @@ Defined in: [builder.ts:111](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > `static` **create**(`id`): `StateBuilder`
 
-Defined in: [builder.ts:107](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L107)
+Defined in: [builder.ts:107](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L107)
 
 #### Parameters
 

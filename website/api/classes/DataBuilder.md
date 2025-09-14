@@ -1,6 +1,6 @@
 # Class: DataBuilder
 
-Defined in: [builder.ts:346](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L346)
+Defined in: [builder.ts:346](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L346)
 
 Fluent API builders for creating SCXML documents programmatically.
 
@@ -13,7 +13,7 @@ SCXML documents from scratch.
 
 > **new DataBuilder**(`id`): `DataBuilder`
 
-Defined in: [builder.ts:349](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L349)
+Defined in: [builder.ts:349](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L349)
 
 #### Parameters
 
@@ -31,7 +31,7 @@ Defined in: [builder.ts:349](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **build**(): [`DataElement`](../interfaces/DataElement.md)
 
-Defined in: [builder.ts:372](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L372)
+Defined in: [builder.ts:372](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L372)
 
 #### Returns
 
@@ -43,7 +43,7 @@ Defined in: [builder.ts:372](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **content**(`content`): `this`
 
-Defined in: [builder.ts:367](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L367)
+Defined in: [builder.ts:367](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L367)
 
 #### Parameters
 
@@ -61,7 +61,7 @@ Defined in: [builder.ts:367](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **expr**(`expr`): `this`
 
-Defined in: [builder.ts:362](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L362)
+Defined in: [builder.ts:362](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L362)
 
 #### Parameters
 
@@ -79,7 +79,7 @@ Defined in: [builder.ts:362](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **src**(`src`): `this`
 
-Defined in: [builder.ts:357](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L357)
+Defined in: [builder.ts:357](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L357)
 
 #### Parameters
 
@@ -97,7 +97,7 @@ Defined in: [builder.ts:357](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > `static` **create**(`id`): `DataBuilder`
 
-Defined in: [builder.ts:353](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L353)
+Defined in: [builder.ts:353](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L353)
 
 #### Parameters
 

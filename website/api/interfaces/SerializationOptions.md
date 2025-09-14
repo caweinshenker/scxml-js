@@ -1,56 +1,46 @@
 # Interface: SerializationOptions
 
-Defined in: [serializer.ts:28](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L28)
+Defined in: [serializer.ts:28](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L28)
 
 Convert SCXML documents back to XML strings with configurable formatting.
 
 ## Properties
 
-### attributesKey?
+### attributeValueProcessor()?
 
-> `optional` **attributesKey**: `string`
+> `optional` **attributeValueProcessor**: (`name`, `value`) => `unknown`
 
-Defined in: [serializer.ts:38](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L38)
+Defined in: [serializer.ts:35](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L35)
 
-***
+#### Parameters
 
-### cdataKey?
+##### name
 
-> `optional` **cdataKey**: `string`
+`string`
 
-Defined in: [serializer.ts:41](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L41)
+##### value
 
-***
+`unknown`
 
-### commentKey?
+#### Returns
 
-> `optional` **commentKey**: `string`
-
-Defined in: [serializer.ts:40](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L40)
+`unknown`
 
 ***
 
-### compact?
+### cdataPropName?
 
-> `optional` **compact**: `boolean`
+> `optional` **cdataPropName**: `string`
 
-Defined in: [serializer.ts:29](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L29)
-
-***
-
-### doctypeKey?
-
-> `optional` **doctypeKey**: `string`
-
-Defined in: [serializer.ts:42](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L42)
+Defined in: [serializer.ts:36](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L36)
 
 ***
 
-### elementsKey?
+### format?
 
-> `optional` **elementsKey**: `string`
+> `optional` **format**: `boolean`
 
-Defined in: [serializer.ts:45](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L45)
+Defined in: [serializer.ts:29](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L29)
 
 ***
 
@@ -58,84 +48,74 @@ Defined in: [serializer.ts:45](https://github.com/caweinshenker/sxcml-js/blob/95
 
 > `optional` **ignoreAttributes**: `boolean`
 
-Defined in: [serializer.ts:32](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L32)
+Defined in: [serializer.ts:38](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L38)
 
 ***
 
-### ignoreCdata?
+### indentBy?
 
-> `optional` **ignoreCdata**: `boolean`
+> `optional` **indentBy**: `string`
 
-Defined in: [serializer.ts:34](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L34)
-
-***
-
-### ignoreComment?
-
-> `optional` **ignoreComment**: `boolean`
-
-Defined in: [serializer.ts:30](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L30)
+Defined in: [serializer.ts:30](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L30)
 
 ***
 
-### ignoreDoctype?
+### preserveOrder?
 
-> `optional` **ignoreDoctype**: `boolean`
+> `optional` **preserveOrder**: `boolean`
 
-Defined in: [serializer.ts:35](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L35)
-
-***
-
-### ignoreInstruction?
-
-> `optional` **ignoreInstruction**: `boolean`
-
-Defined in: [serializer.ts:31](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L31)
+Defined in: [serializer.ts:37](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L37)
 
 ***
 
-### ignoreText?
+### processEntities?
 
-> `optional` **ignoreText**: `boolean`
+> `optional` **processEntities**: `boolean`
 
-Defined in: [serializer.ts:33](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L33)
-
-***
-
-### instructionKey?
-
-> `optional` **instructionKey**: `string`
-
-Defined in: [serializer.ts:39](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L39)
+Defined in: [serializer.ts:39](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L39)
 
 ***
 
-### nameKey?
+### suppressBooleanAttributes?
 
-> `optional` **nameKey**: `string`
+> `optional` **suppressBooleanAttributes**: `boolean`
 
-Defined in: [serializer.ts:44](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L44)
-
-***
-
-### spaces?
-
-> `optional` **spaces**: `string` \| `number`
-
-Defined in: [serializer.ts:36](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L36)
+Defined in: [serializer.ts:33](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L33)
 
 ***
 
-### textKey?
+### suppressEmptyNode?
 
-> `optional` **textKey**: `string`
+> `optional` **suppressEmptyNode**: `boolean`
 
-Defined in: [serializer.ts:37](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L37)
+Defined in: [serializer.ts:31](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L31)
 
 ***
 
-### typeKey?
+### suppressUnpairedNode?
 
-> `optional` **typeKey**: `string`
+> `optional` **suppressUnpairedNode**: `boolean`
 
-Defined in: [serializer.ts:43](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L43)
+Defined in: [serializer.ts:32](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L32)
+
+***
+
+### tagValueProcessor()?
+
+> `optional` **tagValueProcessor**: (`name`, `value`) => `unknown`
+
+Defined in: [serializer.ts:34](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L34)
+
+#### Parameters
+
+##### name
+
+`string`
+
+##### value
+
+`unknown`
+
+#### Returns
+
+`unknown`

@@ -1,6 +1,6 @@
 # Class: SCXMLSerializer
 
-Defined in: [serializer.ts:48](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L48)
+Defined in: [serializer.ts:42](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L42)
 
 Convert SCXML documents back to XML strings with configurable formatting.
 
@@ -10,7 +10,7 @@ Convert SCXML documents back to XML strings with configurable formatting.
 
 > **new SCXMLSerializer**(`options`): `SCXMLSerializer`
 
-Defined in: [serializer.ts:51](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L51)
+Defined in: [serializer.ts:45](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L45)
 
 #### Parameters
 
@@ -28,7 +28,7 @@ Defined in: [serializer.ts:51](https://github.com/caweinshenker/sxcml-js/blob/95
 
 > **serialize**(`document`): `string`
 
-Defined in: [serializer.ts:63](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/serializer.ts#L63)
+Defined in: [serializer.ts:60](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/serializer.ts#L60)
 
 #### Parameters
 

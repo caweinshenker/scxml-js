@@ -1,6 +1,6 @@
 # Class: TransitionBuilder
 
-Defined in: [builder.ts:246](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L246)
+Defined in: [builder.ts:246](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L246)
 
 Fluent API builders for creating SCXML documents programmatically.
 
@@ -13,7 +13,7 @@ SCXML documents from scratch.
 
 > **new TransitionBuilder**(): `TransitionBuilder`
 
-Defined in: [builder.ts:249](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L249)
+Defined in: [builder.ts:249](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L249)
 
 #### Returns
 
@@ -25,7 +25,7 @@ Defined in: [builder.ts:249](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addAssign**(`assign`): `this`
 
-Defined in: [builder.ts:293](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L293)
+Defined in: [builder.ts:293](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L293)
 
 #### Parameters
 
@@ -43,7 +43,7 @@ Defined in: [builder.ts:293](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addLog**(`log`): `this`
 
-Defined in: [builder.ts:285](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L285)
+Defined in: [builder.ts:285](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L285)
 
 #### Parameters
 
@@ -61,7 +61,7 @@ Defined in: [builder.ts:285](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addRaise**(`raise`): `this`
 
-Defined in: [builder.ts:277](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L277)
+Defined in: [builder.ts:277](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L277)
 
 #### Parameters
 
@@ -79,7 +79,7 @@ Defined in: [builder.ts:277](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addScript**(`script`): `this`
 
-Defined in: [builder.ts:309](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L309)
+Defined in: [builder.ts:309](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L309)
 
 #### Parameters
 
@@ -97,7 +97,7 @@ Defined in: [builder.ts:309](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **addSend**(`send`): `this`
 
-Defined in: [builder.ts:301](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L301)
+Defined in: [builder.ts:301](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L301)
 
 #### Parameters
 
@@ -115,7 +115,7 @@ Defined in: [builder.ts:301](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **build**(): [`TransitionElement`](../interfaces/TransitionElement.md)
 
-Defined in: [builder.ts:317](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L317)
+Defined in: [builder.ts:317](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L317)
 
 #### Returns
 
@@ -127,7 +127,7 @@ Defined in: [builder.ts:317](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **cond**(`cond`): `this`
 
-Defined in: [builder.ts:262](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L262)
+Defined in: [builder.ts:262](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L262)
 
 #### Parameters
 
@@ -145,7 +145,7 @@ Defined in: [builder.ts:262](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **event**(`event`): `this`
 
-Defined in: [builder.ts:257](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L257)
+Defined in: [builder.ts:257](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L257)
 
 #### Parameters
 
@@ -163,7 +163,7 @@ Defined in: [builder.ts:257](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **target**(`target`): `this`
 
-Defined in: [builder.ts:267](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L267)
+Defined in: [builder.ts:267](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L267)
 
 #### Parameters
 
@@ -181,7 +181,7 @@ Defined in: [builder.ts:267](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > **type**(`type`): `this`
 
-Defined in: [builder.ts:272](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L272)
+Defined in: [builder.ts:272](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L272)
 
 #### Parameters
 
@@ -199,7 +199,7 @@ Defined in: [builder.ts:272](https://github.com/caweinshenker/sxcml-js/blob/9578
 
 > `static` **create**(): `TransitionBuilder`
 
-Defined in: [builder.ts:253](https://github.com/caweinshenker/sxcml-js/blob/957847bdc6405b8502a575517be9bde5a1c195dc/src/builder.ts#L253)
+Defined in: [builder.ts:253](https://github.com/caweinshenker/scxml-js/blob/7dd2f3af253aee1431983d9212ae959f7d7083ba/src/builder.ts#L253)
 
 #### Returns
 
