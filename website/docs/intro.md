@@ -34,36 +34,33 @@ npm install @scxml/parser
 Here's a simple example to get you started:
 
 ```typescript
-import { SCXML } from '@scxml/parser';
+import { SCXML } from "@scxml/parser";
 
 // Create a simple state machine
 const document = SCXML.create()
-  .name('traffic-light')
-  .initial('red')
-  .addState(SCXML.state('red')
-    .addTransition(SCXML.transition()
-      .event('timer')
-      .target('green')
-      .build())
-    .build())
-  .addState(SCXML.state('green')
-    .addTransition(SCXML.transition()
-      .event('timer')
-      .target('yellow')
-      .build())
-    .build())
-  .addState(SCXML.state('yellow')
-    .addTransition(SCXML.transition()
-      .event('timer')
-      .target('red')
-      .build())
-    .build())
+  .name("traffic-light")
+  .initial("red")
+  .addState(
+    SCXML.state("red")
+      .addTransition(SCXML.transition().event("timer").target("green").build())
+      .build()
+  )
+  .addState(
+    SCXML.state("green")
+      .addTransition(SCXML.transition().event("timer").target("yellow").build())
+      .build()
+  )
+  .addState(
+    SCXML.state("yellow")
+      .addTransition(SCXML.transition().event("timer").target("red").build())
+      .build()
+  )
   .build();
 
 // Validate the document
 const errors = SCXML.validate(document);
 if (errors.length === 0) {
-  console.log('Valid SCXML document!');
+  console.log("Valid SCXML document!");
 }
 
 // Convert to XML

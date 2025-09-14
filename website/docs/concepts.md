@@ -9,13 +9,16 @@ Understanding the key concepts of SCXML and this library will help you build eff
 ## SCXML Fundamentals
 
 ### State Machines
+
 A state machine consists of:
+
 - **States**: Represent different conditions or situations
 - **Transitions**: Define how to move between states
 - **Events**: Triggers that cause transitions
 - **Actions**: Code that executes during transitions or state entry/exit
 
 ### Document Structure
+
 An SCXML document has this basic structure:
 
 ```xml
@@ -61,18 +64,18 @@ The library uses a fluent builder pattern for creating SCXML documents:
 
 ```typescript
 const document = SCXML.create()
-  .name('my-machine')
-  .initial('idle')
-  .addState(SCXML.state('idle')
-    .addTransition(SCXML.transition()
-      .event('start')
-      .target('active')
-      .build())
-    .build())
+  .name("my-machine")
+  .initial("idle")
+  .addState(
+    SCXML.state("idle")
+      .addTransition(SCXML.transition().event("start").target("active").build())
+      .build()
+  )
   .build();
 ```
 
 ### Builder Benefits
+
 - **Type Safety**: Catch errors at compile time
 - **IntelliSense**: Full IDE support with autocompletion
 - **Fluent API**: Readable, chainable method calls
@@ -84,11 +87,13 @@ SCXML supports different data models for state machine variables:
 
 ```typescript
 const document = SCXML.create()
-  .datamodel('ecmascript')
-  .addDataModel(SCXML.dataModel()
-    .addData(SCXML.data('counter').expr('0').build())
-    .addData(SCXML.data('config').content('{"enabled": true}').build())
-    .build())
+  .datamodel("ecmascript")
+  .addDataModel(
+    SCXML.dataModel()
+      .addData(SCXML.data("counter").expr("0").build())
+      .addData(SCXML.data("config").content('{"enabled": true}').build())
+      .build()
+  )
   .build();
 ```
 
@@ -98,12 +103,13 @@ The library performs comprehensive validation:
 
 ```typescript
 const errors = SCXML.validate(document);
-errors.forEach(error => {
+errors.forEach((error) => {
   console.log(`${error.severity}: ${error.message} at ${error.path}`);
 });
 ```
 
 ### Validation Types
+
 - **Structural**: Checks document structure and required elements
 - **Semantic**: Validates state references, transition targets, etc.
 - **Data Model**: Ensures data expressions are valid
