@@ -91,11 +91,18 @@ export class SCXMLModifier {
   }
 
   private updateStateInParallels(parallels: ParallelElement[], stateId: string, updater: (state: StateElement) => StateElement): boolean {
-    for (const parallel of parallels) {
-      if (parallel.state && this.updateStateRecursive(parallel.state, stateId, updater)) {
+    for (let i = 0; i < parallels.length; i++) {
+      // Check if this parallel element matches the stateId
+      if (parallels[i].id === stateId) {
+        // Cast ParallelElement to StateElement for the updater
+        const updatedParallel = updater(parallels[i] as any);
+        parallels[i] = updatedParallel as any;
         return true;
       }
-      if (parallel.parallel && this.updateStateInParallels(parallel.parallel, stateId, updater)) {
+      if (parallels[i].state && this.updateStateRecursive(parallels[i].state!, stateId, updater)) {
+        return true;
+      }
+      if (parallels[i].parallel && this.updateStateInParallels(parallels[i].parallel!, stateId, updater)) {
         return true;
       }
     }
@@ -126,6 +133,11 @@ export class SCXMLModifier {
 
   private findStateInParallels(parallels: ParallelElement[], stateId: string): StateElement | undefined {
     for (const parallel of parallels) {
+      // Check if this parallel element matches the stateId
+      if (parallel.id === stateId) {
+        // Return ParallelElement cast as StateElement
+        return parallel as any;
+      }
       if (parallel.state) {
         const found = this.findStateRecursive(parallel.state, stateId);
         if (found) return found;

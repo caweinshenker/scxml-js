@@ -1,4 +1,4 @@
-import { xml2js, Element, ElementCompact } from 'xml-js';
+import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { 
   SCXMLDocument, 
   SCXMLElement, 
@@ -28,71 +28,135 @@ import {
 
 export class SCXMLParser {
   parse(xmlString: string): SCXMLDocument {
-    const result = xml2js(xmlString, { 
-      compact: false, 
-      ignoreComment: true, 
-      ignoreInstruction: true,
-      ignoreDoctype: true,
-      trim: true
-    }) as Element;
+    // Check for invalid XML characters (control characters except tab, newline, carriage return)
+    if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(xmlString)) {
+      throw new Error('Invalid XML characters detected');
+    }
 
-    const scxmlElement = this.findElement(result, 'scxml');
-    if (!scxmlElement) {
+    // Validate XML structure first
+    const validation = XMLValidator.validate(xmlString, {
+      allowBooleanAttributes: true
+    });
+
+    if (validation !== true) {
+      throw new Error('Malformed XML: ' + validation.err.msg);
+    }
+
+    // Parse the XML
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix: '@_',
+      textNodeName: '#text',
+      cdataTagName: '#cdata',
+      parseAttributeValue: false,
+      parseTagValue: false,
+      trimValues: false,
+      parseTrueNumberOnly: false
+    });
+
+    const result = parser.parse(xmlString);
+
+    if (!result.scxml) {
       throw new Error('No scxml root element found');
     }
 
     return {
-      scxml: this.parseScxmlElement(scxmlElement)
+      scxml: this.parseScxmlElement(result.scxml)
     };
   }
 
-  private findElement(element: Element, name: string): Element | undefined {
-    if (element.name === name) {
-      return element;
+  private extractTextContent(element: any): string | undefined {
+    // fast-xml-parser puts text in #text and CDATA in #cdata
+    let content = '';
+
+    if (element['#text']) {
+      content += element['#text'];
     }
-    
-    if (element.elements) {
-      for (const child of element.elements) {
-        const found = this.findElement(child, name);
-        if (found) return found;
-      }
+
+    if (element['#cdata']) {
+      content += element['#cdata'];
     }
-    
-    return undefined;
+
+    return content || undefined;
   }
 
-  private parseScxmlElement(element: Element): SCXMLElement {
-    const attributes = element.attributes || {};
+  private getAttributeValue(attributes: any, key: string): string | undefined {
+    const value = attributes[key];
+    // Explicitly handle empty string attributes (they should remain empty, not undefined)
+    return value !== undefined ? (value as string) : undefined;
+  }
+
+  private parseScxmlElement(element: any): SCXMLElement {
     const scxml: SCXMLElement = {};
 
-    if (attributes.initial) scxml.initial = attributes.initial as string;
-    if (attributes.name) scxml.name = attributes.name as string;
-    if (attributes.version) scxml.version = attributes.version as string;
-    if (attributes.datamodel) scxml.datamodel = attributes.datamodel as string;
-    if (attributes.xmlns) scxml.xmlns = attributes.xmlns as string;
+    // Extract attributes from the element (fast-xml-parser puts them as direct properties starting with @)
+    for (const key of Object.keys(element)) {
+      if (key.startsWith('@_')) {
+        const attrName = key.substring(2); // Remove @_ prefix
+        const value = element[key];
 
-    if (element.elements) {
-      for (const child of element.elements) {
-        switch (child.name) {
-          case 'state':
-            if (!scxml.state) scxml.state = [];
-            scxml.state.push(this.parseStateElement(child));
+        switch (attrName) {
+          case 'initial':
+            scxml.initial = value;
             break;
-          case 'parallel':
-            if (!scxml.parallel) scxml.parallel = [];
-            scxml.parallel.push(this.parseParallelElement(child));
+          case 'name':
+            scxml.name = value;
             break;
-          case 'final':
-            if (!scxml.final) scxml.final = [];
-            scxml.final.push(this.parseFinalElement(child));
+          case 'version':
+            scxml.version = value;
             break;
           case 'datamodel':
-            scxml.datamodel_element = this.parseDataModelElement(child);
+            scxml.datamodel = value;
             break;
-          case 'script':
-            if (!scxml.script) scxml.script = [];
-            scxml.script.push(this.parseScriptElement(child));
+          case 'xmlns':
+            scxml.xmlns = value;
             break;
+        }
+      }
+    }
+
+    // Parse child elements
+    for (const key of Object.keys(element)) {
+      if (key.startsWith('@_') || key === '#text' || key === '#cdata') continue;
+
+      const childElement = element[key];
+
+      switch (key) {
+        case 'state':
+          if (!scxml.state) scxml.state = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => scxml.state!.push(this.parseStateElement(child)));
+          } else {
+            scxml.state.push(this.parseStateElement(childElement));
+          }
+          break;
+        case 'parallel':
+          if (!scxml.parallel) scxml.parallel = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => scxml.parallel!.push(this.parseParallelElement(child)));
+          } else {
+            scxml.parallel.push(this.parseParallelElement(childElement));
+          }
+          break;
+        case 'final':
+          if (!scxml.final) scxml.final = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => scxml.final!.push(this.parseFinalElement(child)));
+          } else {
+            scxml.final.push(this.parseFinalElement(childElement));
+          }
+          break;
+        case 'datamodel':
+          scxml.datamodel_element = this.parseDataModelElement(childElement);
+          break;
+        case 'script':
+          if (!scxml.script) scxml.script = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => scxml.script!.push(this.parseScriptElement(child)));
+          } else {
+            scxml.script.push(this.parseScriptElement(childElement));
+          }
+          break;
         }
       }
     }
@@ -100,40 +164,70 @@ export class SCXMLParser {
     return scxml;
   }
 
-  private parseStateElement(element: Element): StateElement {
-    const attributes = element.attributes || {};
+  private parseStateElement(element: any): StateElement {
     const state: StateElement = {
-      id: attributes.id as string
+      id: this.getAttributeValue(element, '@_id') || ''
     };
 
-    if (attributes.initial) state.initial = attributes.initial as string;
+    // Handle other attributes
+    if (element['@_initial']) state.initial = element['@_initial'];
+    if (element['@_final']) state.final = element['@_final'] === 'true';
 
-    if (element.elements) {
-      for (const child of element.elements) {
-        switch (child.name) {
-          case 'state':
-            if (!state.state) state.state = [];
-            state.state.push(this.parseStateElement(child));
-            break;
-          case 'parallel':
-            if (!state.parallel) state.parallel = [];
-            state.parallel.push(this.parseParallelElement(child));
-            break;
-          case 'final':
-            if (!state.final) state.final = [];
-            state.final.push(this.parseFinalElement(child));
-            break;
-          case 'onentry':
-            if (!state.onentry) state.onentry = [];
-            state.onentry.push(this.parseOnEntryElement(child));
-            break;
-          case 'onexit':
-            if (!state.onexit) state.onexit = [];
-            state.onexit.push(this.parseOnExitElement(child));
-            break;
-          case 'transition':
-            if (!state.transition) state.transition = [];
-            state.transition.push(this.parseTransitionElement(child));
+    // Parse child elements
+    for (const key of Object.keys(element)) {
+      if (key.startsWith('@_') || key === '#text' || key === '#cdata') continue;
+
+      const childElement = element[key];
+
+      switch (key) {
+        case 'state':
+          if (!state.state) state.state = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.state!.push(this.parseStateElement(child)));
+          } else {
+            state.state.push(this.parseStateElement(childElement));
+          }
+          break;
+        case 'parallel':
+          if (!state.parallel) state.parallel = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.parallel!.push(this.parseParallelElement(child)));
+          } else {
+            state.parallel.push(this.parseParallelElement(childElement));
+          }
+          break;
+        case 'final':
+          if (!state.final) state.final = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.final!.push(this.parseFinalElement(child)));
+          } else {
+            state.final.push(this.parseFinalElement(childElement));
+          }
+          break;
+        case 'onentry':
+          if (!state.onentry) state.onentry = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.onentry!.push(this.parseOnEntryElement(child)));
+          } else {
+            state.onentry.push(this.parseOnEntryElement(childElement));
+          }
+          break;
+        case 'onexit':
+          if (!state.onexit) state.onexit = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.onexit!.push(this.parseOnExitElement(child)));
+          } else {
+            state.onexit.push(this.parseOnExitElement(childElement));
+          }
+          break;
+        case 'transition':
+          if (!state.transition) state.transition = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.transition!.push(this.parseTransitionElement(child)));
+          } else {
+            state.transition.push(this.parseTransitionElement(childElement));
+          }
+          break;
             break;
           case 'invoke':
             if (!state.invoke) state.invoke = [];
@@ -231,9 +325,13 @@ export class SCXMLParser {
     const attributes = element.attributes || {};
     const transition: TransitionElement = {};
 
-    if (attributes.event) transition.event = attributes.event as string;
-    if (attributes.cond) transition.cond = attributes.cond as string;
-    if (attributes.target) transition.target = attributes.target as string;
+    const event = this.getAttributeValue(attributes, 'event');
+    const cond = this.getAttributeValue(attributes, 'cond');
+    const target = this.getAttributeValue(attributes, 'target');
+
+    if (event !== undefined) transition.event = event;
+    if (cond !== undefined) transition.cond = cond;
+    if (target !== undefined) transition.target = target;
     if (attributes.type) transition.type = attributes.type as 'internal' | 'external';
 
     this.parseExecutableContent(element, transition);
@@ -276,7 +374,8 @@ export class SCXMLParser {
 
     if (attributes.src) data.src = attributes.src as string;
     if (attributes.expr) data.expr = attributes.expr as string;
-    if (element.elements?.[0]?.text) data.content = element.elements[0].text as string;
+    const textContent = this.extractTextContent(element);
+    if (textContent !== undefined) data.content = textContent;
 
     return data;
   }
@@ -344,7 +443,8 @@ export class SCXMLParser {
     const content: ContentElement = {};
 
     if (attributes.expr) content.expr = attributes.expr as string;
-    if (element.elements?.[0]?.text) content.content = element.elements[0].text as string;
+    const textContent = this.extractTextContent(element);
+    if (textContent !== undefined) content.content = textContent;
 
     return content;
   }
@@ -374,7 +474,8 @@ export class SCXMLParser {
     const script: ScriptElement = {};
 
     if (attributes.src) script.src = attributes.src as string;
-    if (element.elements?.[0]?.text) script.content = element.elements[0].text as string;
+    const textContent = this.extractTextContent(element);
+    if (textContent !== undefined) script.content = textContent;
 
     return script;
   }

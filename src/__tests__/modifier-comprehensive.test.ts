@@ -237,9 +237,55 @@ describe('SCXML Modifier Comprehensive Tests', () => {
         .build());
 
       const result = modifier.getDocument();
+
+      // Debug: Log all states to see what's available
+      console.log('All states in document:');
+      const logStates = (states: any[], prefix = '') => {
+        states?.forEach(state => {
+          console.log(`${prefix}- ${state.id} (type: ${state.parallel ? 'parallel' : 'state'})`);
+          if (state.state) {
+            logStates(state.state, prefix + '  ');
+          }
+        });
+      };
+      logStates(result.scxml.state || []);
+
+      // Debug: Also log parallel states separately
+      console.log('All parallel states:');
+      const logParallel = (states: any[], prefix = '') => {
+        states?.forEach(state => {
+          if (state.parallel) {
+            console.log(`${prefix}Found parallel: ${state.id}`);
+          }
+          if (state.state) {
+            logParallel(state.state, prefix + '  ');
+          }
+        });
+      };
+      logParallel(result.scxml.state || []);
+
+      // Debug: Check what the actual root state contains
+      const rootState = result.scxml.state?.[0];
+      console.log('Root state structure:', {
+        id: rootState?.id,
+        parallel: rootState?.parallel,
+        hasState: !!rootState?.state,
+        stateCount: rootState?.state?.length,
+        stateIds: rootState?.state?.map((s: any) => s.id)
+      });
+
       const parallel = modifier.findState('parallel');
-      expect(parallel!.state).toHaveLength(3);
-      expect(parallel!.state![2].id).toBe('p3');
+
+      // Debug: Check if parallel state exists and what its structure is
+      if (!parallel) {
+        throw new Error('Parallel state not found');
+      }
+      if (!parallel.state) {
+        throw new Error('Parallel state has no child states');
+      }
+
+      expect(parallel.state).toHaveLength(3);
+      expect(parallel.state[2].id).toBe('p3');
 
       const p1 = modifier.findState('p1');
       expect(p1!.transition).toHaveLength(1);
