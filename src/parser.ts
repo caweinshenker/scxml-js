@@ -370,59 +370,58 @@ export class SCXMLParser {
     return finalElement;
   }
 
-  private parseTransitionElement(element: Element): TransitionElement {
-    const attributes = element.attributes || {};
+  private parseTransitionElement(element: any): TransitionElement {
     const transition: TransitionElement = {};
 
-    const event = this.getAttributeValue(attributes, 'event');
-    const cond = this.getAttributeValue(attributes, 'cond');
-    const target = this.getAttributeValue(attributes, 'target');
+    const event = this.getAttributeValue(element, '@_event');
+    const cond = this.getAttributeValue(element, '@_cond');
+    const target = this.getAttributeValue(element, '@_target');
 
     if (event !== undefined) transition.event = event;
     if (cond !== undefined) transition.cond = cond;
     if (target !== undefined) transition.target = target;
-    if (attributes.type) transition.type = attributes.type as 'internal' | 'external';
+    if (element['@_type']) transition.type = element['@_type'] as 'internal' | 'external';
 
     this.parseExecutableContent(element, transition);
 
     return transition;
   }
 
-  private parseOnEntryElement(element: Element): OnEntryElement {
+  private parseOnEntryElement(element: any): OnEntryElement {
     const onentry: OnEntryElement = {};
     this.parseExecutableContent(element, onentry);
     return onentry;
   }
 
-  private parseOnExitElement(element: Element): OnExitElement {
+  private parseOnExitElement(element: any): OnExitElement {
     const onexit: OnExitElement = {};
     this.parseExecutableContent(element, onexit);
     return onexit;
   }
 
-  private parseDataModelElement(element: Element): DataModelElement {
+  private parseDataModelElement(element: any): DataModelElement {
     const datamodel: DataModelElement = {};
 
-    if (element.elements) {
-      for (const child of element.elements) {
-        if (child.name === 'data') {
-          if (!datamodel.data) datamodel.data = [];
-          datamodel.data.push(this.parseDataElement(child));
-        }
+    // Check for data elements
+    if (element.data) {
+      datamodel.data = [];
+      if (Array.isArray(element.data)) {
+        element.data.forEach((child: any) => datamodel.data!.push(this.parseDataElement(child)));
+      } else {
+        datamodel.data.push(this.parseDataElement(element.data));
       }
     }
 
     return datamodel;
   }
 
-  private parseDataElement(element: Element): DataElement {
-    const attributes = element.attributes || {};
+  private parseDataElement(element: any): DataElement {
     const data: DataElement = {
-      id: attributes.id as string
+      id: element['@_id'] || ''
     };
 
-    if (attributes.src) data.src = attributes.src as string;
-    if (attributes.expr) data.expr = attributes.expr as string;
+    if (element['@_src']) data.src = element['@_src'];
+    if (element['@_expr']) data.expr = element['@_expr'];
     const textContent = this.extractTextContent(element);
     if (textContent !== undefined) data.content = textContent;
 
@@ -518,25 +517,31 @@ export class SCXMLParser {
     return donedata;
   }
 
-  private parseScriptElement(element: Element): ScriptElement {
-    const attributes = element.attributes || {};
+  private parseScriptElement(element: any): ScriptElement {
     const script: ScriptElement = {};
 
-    if (attributes.src) script.src = attributes.src as string;
+    if (element['@_src']) script.src = element['@_src'];
     const textContent = this.extractTextContent(element);
     if (textContent !== undefined) script.content = textContent;
 
     return script;
   }
 
-  private parseExecutableContent(element: Element, target: any): void {
-    if (!element.elements) return;
+  private parseExecutableContent(element: any, target: any): void {
+    // Parse executable content child elements
+    for (const key of Object.keys(element)) {
+      if (key.startsWith('@_') || key === '#text' || key === '#cdata') continue;
 
-    for (const child of element.elements) {
-      switch (child.name) {
+      const childElement = element[key];
+
+      switch (key) {
         case 'raise':
           if (!target.raise) target.raise = [];
-          target.raise.push(this.parseRaiseElement(child));
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => target.raise.push(this.parseRaiseElement(child)));
+          } else {
+            target.raise.push(this.parseRaiseElement(childElement));
+          }
           break;
         case 'if':
           if (!target.if) target.if = [];
