@@ -27,6 +27,76 @@ import {
 } from "./types";
 
 export class SCXMLParser {
+  // Helper functions for working with preserveOrder structure
+  private getAttributes(element: any): any {
+    return element[":@"] || {};
+  }
+
+  private getTextContent(element: any): string | undefined {
+    if (Array.isArray(element)) {
+      // Find #text nodes and concatenate them
+      return element
+        .filter((item) => item["#text"])
+        .map((item) => item["#text"])
+        .join("");
+    }
+    return undefined;
+  }
+
+  private getChildElements(elementArray: any[], tagName: string): any[] {
+    if (!Array.isArray(elementArray)) return [];
+
+    return elementArray
+      .filter((item) => item[tagName])
+      .map((item) => ({
+        element: item[tagName],
+        attributes: item[":@"] || {},
+      }));
+  }
+
+  private getAllChildElements(
+    elementArray: any[]
+  ): Array<{ tagName: string; element: any; attributes: any }> {
+    if (!Array.isArray(elementArray)) return [];
+
+    return elementArray
+      .filter((item) => {
+        // Skip #text nodes and :@ attribute objects
+        const keys = Object.keys(item);
+        return (
+          keys.length > 0 && !keys.includes("#text") && !keys.includes(":@")
+        );
+      })
+      .map((item) => {
+        const tagName = Object.keys(item).find(
+          (key) => key !== ":@" && key !== "#text"
+        )!;
+        return {
+          tagName,
+          element: item[tagName],
+          attributes: item[":@"] || {},
+        };
+      });
+  }
+
+  private extractTextContent(element: any): string | undefined {
+    if (typeof element === "string") {
+      return element;
+    }
+
+    if (Array.isArray(element)) {
+      const textNodes = element.filter((item) => item["#text"]);
+      if (textNodes.length > 0) {
+        return textNodes
+          .map((item) => item["#text"])
+          .join("")
+          .trim();
+      }
+    }
+
+    return undefined;
+  }
+
   parse(xmlString: string): SCXMLDocument {
     // Check for invalid XML characters (control characters except tab, newline, carriage return)
     if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(xmlString)) {
@@ -45,7 +115,7 @@ export class SCXMLParser {
       throw new Error("Malformed XML: " + validation.err.msg);
     }
 
-    // Parse the XML
+    // Parse the XML with preserveOrder for deterministic parsing
     const parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: "@_",
@@ -54,33 +124,24 @@ export class SCXMLParser {
       parseAttributeValue: false,
       parseTagValue: false,
       trimValues: false,
+      preserveOrder: true,
     });
 
     const result = parser.parse(trimmedXml);
 
-    if (!result.scxml) {
+    // With preserveOrder, result is an array
+    if (!Array.isArray(result) || result.length === 0 || !result[0].scxml) {
       throw new Error("No scxml root element found");
     }
 
+    const scxmlData = result[0].scxml;
+    const scxmlAttributes = result[0][":@"] || {};
+
     return {
-      scxml: this.parseScxmlElement(result.scxml),
+      scxml: this.parseScxmlElement(scxmlData, scxmlAttributes),
     };
   }
 
-  private extractTextContent(element: any): string | undefined {
-    // fast-xml-parser puts text in #text and CDATA in #cdata
-    let content = "";
-
-    if (element["#text"]) {
-      content += element["#text"];
-    }
-
-    if (element["#cdata"]) {
-      content += element["#cdata"];
-    }
-
-    return content || undefined;
-  }
 
   private getAttributeValue(attributes: any, key: string): string | undefined {
     const value = attributes[key];
@@ -88,14 +149,17 @@ export class SCXMLParser {
     return value !== undefined ? (value as string) : undefined;
   }
 
-  private parseScxmlElement(element: any): SCXMLElement {
+  private parseScxmlElement(
+    elementArray: any[],
+    attributes: any
+  ): SCXMLElement {
     const scxml: SCXMLElement = {};
 
-    // Extract attributes from the element (fast-xml-parser puts them as direct properties starting with @)
-    for (const key of Object.keys(element)) {
+    // Extract attributes from the element
+    for (const key of Object.keys(attributes)) {
       if (key.startsWith("@_")) {
         const attrName = key.substring(2); // Remove @_ prefix
-        const value = element[key];
+        const value = attributes[key];
 
         switch (attrName) {
           case "initial":
@@ -117,55 +181,40 @@ export class SCXMLParser {
       }
     }
 
-    // Parse child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
 
-      const childElement = element[key];
-
-      switch (key) {
+    for (const child of children) {
+      switch (child.tagName) {
         case "state":
           if (!scxml.state) scxml.state = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              scxml.state!.push(this.parseStateElement(child))
-            );
-          } else {
-            scxml.state.push(this.parseStateElement(childElement));
-          }
+          scxml.state.push(
+            this.parseStateElement(child.element, child.attributes)
+          );
           break;
         case "parallel":
           if (!scxml.parallel) scxml.parallel = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              scxml.parallel!.push(this.parseParallelElement(child))
-            );
-          } else {
-            scxml.parallel.push(this.parseParallelElement(childElement));
-          }
+          scxml.parallel.push(
+            this.parseParallelElement(child.element, child.attributes)
+          );
           break;
         case "final":
           if (!scxml.final) scxml.final = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              scxml.final!.push(this.parseFinalElement(child))
-            );
-          } else {
-            scxml.final.push(this.parseFinalElement(childElement));
-          }
+          scxml.final.push(
+            this.parseFinalElement(child.element, child.attributes)
+          );
           break;
         case "datamodel":
-          scxml.datamodel_element = this.parseDataModelElement(childElement);
+          scxml.datamodel_element = this.parseDataModelElement(
+            child.element,
+            child.attributes
+          );
           break;
         case "script":
           if (!scxml.script) scxml.script = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              scxml.script!.push(this.parseScriptElement(child))
-            );
-          } else {
-            scxml.script.push(this.parseScriptElement(childElement));
-          }
+          scxml.script.push(
+            this.parseScriptElement(child.element, child.attributes)
+          );
           break;
       }
     }
@@ -173,103 +222,53 @@ export class SCXMLParser {
     return scxml;
   }
 
-  private parseStateElement(element: any): StateElement {
+  private parseStateElement(elementArray: any[], attributes: any): StateElement {
     const state: StateElement = {
-      id: this.getAttributeValue(element, "@_id") || "",
+      id: this.getAttributeValue(attributes, "@_id") || "",
     };
 
     // Handle other attributes
-    if (element["@_initial"]) state.initial = element["@_initial"];
+    if (attributes["@_initial"]) state.initial = attributes["@_initial"];
 
-    // Parse child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
-
-      const childElement = element[key];
-
-      switch (key) {
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
         case "state":
           if (!state.state) state.state = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.state!.push(this.parseStateElement(child))
-            );
-          } else {
-            state.state.push(this.parseStateElement(childElement));
-          }
+          state.state.push(this.parseStateElement(child.element, child.attributes));
           break;
         case "parallel":
           if (!state.parallel) state.parallel = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.parallel!.push(this.parseParallelElement(child))
-            );
-          } else {
-            state.parallel.push(this.parseParallelElement(childElement));
-          }
+          state.parallel.push(this.parseParallelElement(child.element, child.attributes));
           break;
         case "final":
           if (!state.final) state.final = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.final!.push(this.parseFinalElement(child))
-            );
-          } else {
-            state.final.push(this.parseFinalElement(childElement));
-          }
+          state.final.push(this.parseFinalElement(child.element, child.attributes));
           break;
         case "onentry":
           if (!state.onentry) state.onentry = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.onentry!.push(this.parseOnEntryElement(child))
-            );
-          } else {
-            state.onentry.push(this.parseOnEntryElement(childElement));
-          }
+          state.onentry.push(this.parseOnEntryElement(child.element, child.attributes));
           break;
         case "onexit":
           if (!state.onexit) state.onexit = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.onexit!.push(this.parseOnExitElement(child))
-            );
-          } else {
-            state.onexit.push(this.parseOnExitElement(childElement));
-          }
+          state.onexit.push(this.parseOnExitElement(child.element, child.attributes));
           break;
         case "transition":
           if (!state.transition) state.transition = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.transition!.push(this.parseTransitionElement(child))
-            );
-          } else {
-            state.transition.push(this.parseTransitionElement(childElement));
-          }
+          state.transition.push(this.parseTransitionElement(child.element, child.attributes));
           break;
         case "invoke":
           if (!state.invoke) state.invoke = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.invoke!.push(this.parseInvokeElement(child))
-            );
-          } else {
-            state.invoke.push(this.parseInvokeElement(childElement));
-          }
+          state.invoke.push(this.parseInvokeElement(child.element, child.attributes));
           break;
         case "datamodel":
-          state.datamodel = this.parseDataModelElement(childElement);
+          state.datamodel = this.parseDataModelElement(child.element, child.attributes);
           break;
         case "history":
           if (!state.history) state.history = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              state.history!.push(this.parseHistoryElement(child))
-            );
-          } else {
-            state.history.push(this.parseHistoryElement(childElement));
-          }
+          state.history.push(this.parseHistoryElement(child.element, child.attributes));
           break;
       }
     }
@@ -277,90 +276,46 @@ export class SCXMLParser {
     return state;
   }
 
-  private parseParallelElement(element: any): ParallelElement {
+  private parseParallelElement(elementArray: any[], attributes: any): ParallelElement {
     const parallel: ParallelElement = {
-      id: element["@_id"] || "",
+      id: attributes["@_id"] || "",
     };
 
-    // Parse child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
-
-      const childElement = element[key];
-
-      switch (key) {
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
         case "state":
           if (!parallel.state) parallel.state = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              parallel.state!.push(this.parseStateElement(child))
-            );
-          } else {
-            parallel.state.push(this.parseStateElement(childElement));
-          }
+          parallel.state.push(this.parseStateElement(child.element, child.attributes));
           break;
         case "parallel":
           if (!parallel.parallel) parallel.parallel = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              parallel.parallel!.push(this.parseParallelElement(child))
-            );
-          } else {
-            parallel.parallel.push(this.parseParallelElement(childElement));
-          }
+          parallel.parallel.push(this.parseParallelElement(child.element, child.attributes));
           break;
         case "onentry":
           if (!parallel.onentry) parallel.onentry = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              parallel.onentry!.push(this.parseOnEntryElement(child))
-            );
-          } else {
-            parallel.onentry.push(this.parseOnEntryElement(childElement));
-          }
+          parallel.onentry.push(this.parseOnEntryElement(child.element, child.attributes));
           break;
         case "onexit":
           if (!parallel.onexit) parallel.onexit = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              parallel.onexit!.push(this.parseOnExitElement(child))
-            );
-          } else {
-            parallel.onexit.push(this.parseOnExitElement(childElement));
-          }
+          parallel.onexit.push(this.parseOnExitElement(child.element, child.attributes));
           break;
         case "transition":
           if (!parallel.transition) parallel.transition = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              parallel.transition!.push(this.parseTransitionElement(child))
-            );
-          } else {
-            parallel.transition.push(this.parseTransitionElement(childElement));
-          }
+          parallel.transition.push(this.parseTransitionElement(child.element, child.attributes));
           break;
         case "invoke":
           if (!parallel.invoke) parallel.invoke = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              parallel.invoke!.push(this.parseInvokeElement(child))
-            );
-          } else {
-            parallel.invoke.push(this.parseInvokeElement(childElement));
-          }
+          parallel.invoke.push(this.parseInvokeElement(child.element, child.attributes));
           break;
         case "datamodel":
-          parallel.datamodel = this.parseDataModelElement(childElement);
+          parallel.datamodel = this.parseDataModelElement(child.element, child.attributes);
           break;
         case "history":
           if (!parallel.history) parallel.history = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              parallel.history!.push(this.parseHistoryElement(child))
-            );
-          } else {
-            parallel.history.push(this.parseHistoryElement(childElement));
-          }
+          parallel.history.push(this.parseHistoryElement(child.element, child.attributes));
           break;
       }
     }
@@ -368,40 +323,26 @@ export class SCXMLParser {
     return parallel;
   }
 
-  private parseFinalElement(element: any): FinalElement {
+  private parseFinalElement(elementArray: any[], attributes: any): FinalElement {
     const finalElement: FinalElement = {
-      id: element["@_id"] || "",
+      id: attributes["@_id"] || "",
     };
 
-    // Parse child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
-
-      const childElement = element[key];
-
-      switch (key) {
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
         case "onentry":
           if (!finalElement.onentry) finalElement.onentry = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              finalElement.onentry!.push(this.parseOnEntryElement(child))
-            );
-          } else {
-            finalElement.onentry.push(this.parseOnEntryElement(childElement));
-          }
+          finalElement.onentry.push(this.parseOnEntryElement(child.element, child.attributes));
           break;
         case "onexit":
           if (!finalElement.onexit) finalElement.onexit = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              finalElement.onexit!.push(this.parseOnExitElement(child))
-            );
-          } else {
-            finalElement.onexit.push(this.parseOnExitElement(childElement));
-          }
+          finalElement.onexit.push(this.parseOnExitElement(child.element, child.attributes));
           break;
         case "donedata":
-          finalElement.donedata = this.parseDoneDataElement(childElement);
+          finalElement.donedata = this.parseDoneDataElement(child.element, child.attributes);
           break;
       }
     }
@@ -409,77 +350,77 @@ export class SCXMLParser {
     return finalElement;
   }
 
-  private parseTransitionElement(element: any): TransitionElement {
+  private parseTransitionElement(elementArray: any[], attributes: any): TransitionElement {
     const transition: TransitionElement = {};
 
-    const event = this.getAttributeValue(element, "@_event");
-    const cond = this.getAttributeValue(element, "@_cond");
-    const target = this.getAttributeValue(element, "@_target");
+    const event = this.getAttributeValue(attributes, "@_event");
+    const cond = this.getAttributeValue(attributes, "@_cond");
+    const target = this.getAttributeValue(attributes, "@_target");
 
     if (event !== undefined) transition.event = event;
     if (cond !== undefined) transition.cond = cond;
     if (target !== undefined) transition.target = target;
-    if (element["@_type"])
-      transition.type = element["@_type"] as "internal" | "external";
+    if (attributes["@_type"])
+      transition.type = attributes["@_type"] as "internal" | "external";
 
-    this.parseExecutableContent(element, transition);
+    this.parseExecutableContent(elementArray, transition);
 
     return transition;
   }
 
-  private parseOnEntryElement(element: any): OnEntryElement {
+  private parseOnEntryElement(elementArray: any[], attributes: any): OnEntryElement {
     const onentry: OnEntryElement = {};
-    this.parseExecutableContent(element, onentry);
+    this.parseExecutableContent(elementArray, onentry);
     return onentry;
   }
 
-  private parseOnExitElement(element: any): OnExitElement {
+  private parseOnExitElement(elementArray: any[], attributes: any): OnExitElement {
     const onexit: OnExitElement = {};
-    this.parseExecutableContent(element, onexit);
+    this.parseExecutableContent(elementArray, onexit);
     return onexit;
   }
 
-  private parseDataModelElement(element: any): DataModelElement {
+  private parseDataModelElement(elementArray: any[], attributes: any): DataModelElement {
     const datamodel: DataModelElement = {};
 
-    // Check for data elements
-    if (element.data) {
-      datamodel.data = [];
-      if (Array.isArray(element.data)) {
-        element.data.forEach((child: any) =>
-          datamodel.data!.push(this.parseDataElement(child))
-        );
-      } else {
-        datamodel.data.push(this.parseDataElement(element.data));
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
+        case "data":
+          if (!datamodel.data) datamodel.data = [];
+          datamodel.data.push(this.parseDataElement(child.element, child.attributes));
+          break;
       }
     }
 
     return datamodel;
   }
 
-  private parseDataElement(element: any): DataElement {
+  private parseDataElement(elementArray: any[], attributes: any): DataElement {
     const data: DataElement = {
-      id: element["@_id"] || "",
+      id: attributes["@_id"] || "",
     };
 
-    if (element["@_src"]) data.src = element["@_src"];
-    if (element["@_expr"]) data.expr = element["@_expr"];
-    const textContent = this.extractTextContent(element);
+    if (attributes["@_src"]) data.src = attributes["@_src"];
+    if (attributes["@_expr"]) data.expr = attributes["@_expr"];
+    const textContent = this.extractTextContent(elementArray);
     if (textContent !== undefined) data.content = textContent;
 
     return data;
   }
 
-  private parseInvokeElement(element: any): InvokeElement {
+  private parseInvokeElement(elementArray: any[], attributes: any): InvokeElement {
     const invoke: InvokeElement = {};
 
-    if (element["@_type"]) invoke.type = element["@_type"];
-    if (element["@_src"]) invoke.src = element["@_src"];
-    if (element["@_id"]) invoke.id = element["@_id"];
-    if (element["@_idlocation"]) invoke.idlocation = element["@_idlocation"];
-    if (element["@_srcexpr"]) invoke.srcexpr = element["@_srcexpr"];
-    if (element["@_autoforward"])
-      invoke.autoforward = element["@_autoforward"] === "true";
+    if (attributes["@_type"]) invoke.type = attributes["@_type"];
+    if (attributes["@_src"]) invoke.src = attributes["@_src"];
+    if (attributes["@_id"]) invoke.id = attributes["@_id"];
+    if (attributes["@_idlocation"]) invoke.idlocation = attributes["@_idlocation"];
+    if (attributes["@_srcexpr"]) invoke.srcexpr = attributes["@_srcexpr"];
+    if (attributes["@_autoforward"])
+      invoke.autoforward = attributes["@_autoforward"] === "true";
 
     // Parse child elements
     for (const key of Object.keys(element)) {
@@ -507,10 +448,10 @@ export class SCXMLParser {
     return invoke;
   }
 
-  private parseHistoryElement(element: any): HistoryElement {
+  private parseHistoryElement(elementArray: any[], attributes: any): HistoryElement {
     const history: HistoryElement = {
-      id: element["@_id"] || "",
-      type: element["@_type"] as "shallow" | "deep",
+      id: attributes["@_id"] || "",
+      type: attributes["@_type"] as "shallow" | "deep",
     };
 
     // Handle transition child element
@@ -525,35 +466,35 @@ export class SCXMLParser {
     return history;
   }
 
-  private parseParamElement(element: any): ParamElement {
+  private parseParamElement(elementArray: any[], attributes: any): ParamElement {
     const param: ParamElement = {
-      name: element["@_name"] || "",
+      name: attributes["@_name"] || "",
     };
 
-    if (element["@_expr"]) param.expr = element["@_expr"];
-    if (element["@_location"]) param.location = element["@_location"];
+    if (attributes["@_expr"]) param.expr = attributes["@_expr"];
+    if (attributes["@_location"]) param.location = attributes["@_location"];
 
     return param;
   }
 
-  private parseContentElement(element: any): ContentElement {
+  private parseContentElement(elementArray: any[], attributes: any): ContentElement {
     const content: ContentElement = {};
 
     // Handle the case where fast-xml-parser returns a string directly for text-only elements
-    if (typeof element === "string") {
-      content.content = element;
+    if (Array.isArray(elementArray) && elementArray.length === 1 && typeof elementArray[0] === "string") {
+      content.content = elementArray[0];
       return content;
     }
 
     // Handle object case (when element has attributes)
-    if (element["@_expr"]) content.expr = element["@_expr"];
-    const textContent = this.extractTextContent(element);
+    if (attributes["@_expr"]) content.expr = attributes["@_expr"];
+    const textContent = this.extractTextContent(elementArray);
     if (textContent !== undefined) content.content = textContent;
 
     return content;
   }
 
-  private parseDoneDataElement(element: any): DoneDataElement {
+  private parseDoneDataElement(elementArray: any[], attributes: any): DoneDataElement {
     const donedata: DoneDataElement = {};
 
     // Parse child elements
@@ -582,175 +523,125 @@ export class SCXMLParser {
     return donedata;
   }
 
-  private parseScriptElement(element: any): ScriptElement {
+  private parseScriptElement(elementArray: any[], attributes: any): ScriptElement {
     const script: ScriptElement = {};
 
     // Handle the case where fast-xml-parser returns a string directly for text-only elements
-    if (typeof element === "string") {
-      script.content = element;
+    if (Array.isArray(elementArray) && elementArray.length === 1 && typeof elementArray[0] === "string") {
+      script.content = elementArray[0];
       return script;
     }
 
     // Handle object case (when element has attributes)
-    if (element["@_src"]) script.src = element["@_src"];
-    const textContent = this.extractTextContent(element);
+    if (attributes["@_src"]) script.src = attributes["@_src"];
+    const textContent = this.extractTextContent(elementArray);
     if (textContent !== undefined) script.content = textContent;
 
     return script;
   }
 
-  private parseExecutableContent(element: any, target: any): void {
-    // Parse executable content child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
-
-      const childElement = element[key];
-
-      switch (key) {
+  private parseExecutableContent(elementArray: any[], target: any): void {
+    // Parse executable content child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
         case "raise":
           if (!target.raise) target.raise = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.raise.push(this.parseRaiseElement(child))
-            );
-          } else {
-            target.raise.push(this.parseRaiseElement(childElement));
-          }
+          target.raise.push(this.parseRaiseElement(child.element, child.attributes));
           break;
         case "if":
           if (!target.if) target.if = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.if.push(this.parseIfElement(child))
-            );
-          } else {
-            target.if.push(this.parseIfElement(childElement));
-          }
+          target.if.push(this.parseIfElement(child.element, child.attributes));
           break;
         case "foreach":
           if (!target.foreach) target.foreach = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.foreach.push(this.parseForEachElement(child))
-            );
-          } else {
-            target.foreach.push(this.parseForEachElement(childElement));
-          }
+          target.foreach.push(this.parseForEachElement(child.element, child.attributes));
           break;
         case "log":
           if (!target.log) target.log = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.log.push(this.parseLogElement(child))
-            );
-          } else {
-            target.log.push(this.parseLogElement(childElement));
-          }
+          target.log.push(this.parseLogElement(child.element, child.attributes));
           break;
         case "assign":
           if (!target.assign) target.assign = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.assign.push(this.parseAssignElement(child))
-            );
-          } else {
-            target.assign.push(this.parseAssignElement(childElement));
-          }
+          target.assign.push(this.parseAssignElement(child.element, child.attributes));
           break;
         case "send":
           if (!target.send) target.send = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.send.push(this.parseSendElement(child))
-            );
-          } else {
-            target.send.push(this.parseSendElement(childElement));
-          }
+          target.send.push(this.parseSendElement(child.element, child.attributes));
           break;
         case "cancel":
           if (!target.cancel) target.cancel = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.cancel.push(this.parseCancelElement(child))
-            );
-          } else {
-            target.cancel.push(this.parseCancelElement(childElement));
-          }
+          target.cancel.push(this.parseCancelElement(child.element, child.attributes));
           break;
         case "script":
           if (!target.script) target.script = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              target.script.push(this.parseScriptElement(child))
-            );
-          } else {
-            target.script.push(this.parseScriptElement(childElement));
-          }
+          target.script.push(this.parseScriptElement(child.element, child.attributes));
           break;
       }
     }
   }
 
-  private parseRaiseElement(element: any): RaiseElement {
+  private parseRaiseElement(elementArray: any[], attributes: any): RaiseElement {
     return {
-      event: element["@_event"] || "",
+      event: attributes["@_event"] || "",
     };
   }
 
-  private parseIfElement(element: any): IfElement {
+  private parseIfElement(elementArray: any[], attributes: any): IfElement {
     const ifElement: IfElement = {
-      cond: element["@_cond"] || "",
+      cond: attributes["@_cond"] || "",
     };
 
-    this.parseExecutableContent(element, ifElement);
+    this.parseExecutableContent(elementArray, ifElement);
     return ifElement;
   }
 
-  private parseForEachElement(element: any): ForEachElement {
+  private parseForEachElement(elementArray: any[], attributes: any): ForEachElement {
     const forEach: ForEachElement = {
-      array: element["@_array"] || "",
-      item: element["@_item"] || "",
+      array: attributes["@_array"] || "",
+      item: attributes["@_item"] || "",
     };
 
-    if (element["@_index"]) forEach.index = element["@_index"];
+    if (attributes["@_index"]) forEach.index = attributes["@_index"];
 
-    this.parseExecutableContent(element, forEach);
+    this.parseExecutableContent(elementArray, forEach);
     return forEach;
   }
 
-  private parseLogElement(element: any): LogElement {
+  private parseLogElement(elementArray: any[], attributes: any): LogElement {
     const log: LogElement = {};
 
-    if (element["@_label"]) log.label = element["@_label"];
-    if (element["@_expr"]) log.expr = element["@_expr"];
+    if (attributes["@_label"]) log.label = attributes["@_label"];
+    if (attributes["@_expr"]) log.expr = attributes["@_expr"];
 
     return log;
   }
 
-  private parseAssignElement(element: any): AssignElement {
+  private parseAssignElement(elementArray: any[], attributes: any): AssignElement {
     const assign: AssignElement = {
-      location: element["@_location"] || "",
+      location: attributes["@_location"] || "",
     };
 
-    if (element["@_expr"]) assign.expr = element["@_expr"];
+    if (attributes["@_expr"]) assign.expr = attributes["@_expr"];
 
     return assign;
   }
 
-  private parseSendElement(element: any): SendElement {
+  private parseSendElement(elementArray: any[], attributes: any): SendElement {
     const send: SendElement = {};
 
-    if (element["@_event"]) send.event = element["@_event"];
-    if (element["@_eventexpr"]) send.eventexpr = element["@_eventexpr"];
-    if (element["@_target"]) send.target = element["@_target"];
-    if (element["@_targetexpr"]) send.targetexpr = element["@_targetexpr"];
-    if (element["@_type"]) send.type = element["@_type"];
-    if (element["@_typeexpr"]) send.typeexpr = element["@_typeexpr"];
-    if (element["@_id"]) send.id = element["@_id"];
-    if (element["@_idlocation"]) send.idlocation = element["@_idlocation"];
-    if (element["@_delay"]) send.delay = element["@_delay"];
-    if (element["@_delayexpr"]) send.delayexpr = element["@_delayexpr"];
-    if (element["@_namelist"]) send.namelist = element["@_namelist"];
+    if (attributes["@_event"]) send.event = attributes["@_event"];
+    if (attributes["@_eventexpr"]) send.eventexpr = attributes["@_eventexpr"];
+    if (attributes["@_target"]) send.target = attributes["@_target"];
+    if (attributes["@_targetexpr"]) send.targetexpr = attributes["@_targetexpr"];
+    if (attributes["@_type"]) send.type = attributes["@_type"];
+    if (attributes["@_typeexpr"]) send.typeexpr = attributes["@_typeexpr"];
+    if (attributes["@_id"]) send.id = attributes["@_id"];
+    if (attributes["@_idlocation"]) send.idlocation = attributes["@_idlocation"];
+    if (attributes["@_delay"]) send.delay = attributes["@_delay"];
+    if (attributes["@_delayexpr"]) send.delayexpr = attributes["@_delayexpr"];
+    if (attributes["@_namelist"]) send.namelist = attributes["@_namelist"];
 
     // Parse child elements
     for (const key of Object.keys(element)) {
@@ -778,11 +669,11 @@ export class SCXMLParser {
     return send;
   }
 
-  private parseCancelElement(element: any): CancelElement {
+  private parseCancelElement(elementArray: any[], attributes: any): CancelElement {
     const cancel: CancelElement = {};
 
-    if (element["@_sendid"]) cancel.sendid = element["@_sendid"];
-    if (element["@_sendidexpr"]) cancel.sendidexpr = element["@_sendidexpr"];
+    if (attributes["@_sendid"]) cancel.sendid = attributes["@_sendid"];
+    if (attributes["@_sendidexpr"]) cancel.sendidexpr = attributes["@_sendidexpr"];
 
     return cancel;
   }
