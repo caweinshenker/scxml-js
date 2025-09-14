@@ -228,18 +228,25 @@ export class SCXMLParser {
             state.transition.push(this.parseTransitionElement(childElement));
           }
           break;
-            break;
-          case 'invoke':
-            if (!state.invoke) state.invoke = [];
-            state.invoke.push(this.parseInvokeElement(child));
-            break;
-          case 'datamodel':
-            state.datamodel = this.parseDataModelElement(child);
-            break;
-          case 'history':
-            if (!state.history) state.history = [];
-            state.history.push(this.parseHistoryElement(child));
-            break;
+        case 'invoke':
+          if (!state.invoke) state.invoke = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.invoke!.push(this.parseInvokeElement(child)));
+          } else {
+            state.invoke.push(this.parseInvokeElement(childElement));
+          }
+          break;
+        case 'datamodel':
+          state.datamodel = this.parseDataModelElement(childElement);
+          break;
+        case 'history':
+          if (!state.history) state.history = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => state.history!.push(this.parseHistoryElement(child)));
+          } else {
+            state.history.push(this.parseHistoryElement(childElement));
+          }
+          break;
         }
       }
     }
@@ -247,46 +254,77 @@ export class SCXMLParser {
     return state;
   }
 
-  private parseParallelElement(element: Element): ParallelElement {
-    const attributes = element.attributes || {};
+  private parseParallelElement(element: any): ParallelElement {
     const parallel: ParallelElement = {
-      id: attributes.id as string
+      id: element['@_id'] || ''
     };
 
-    if (element.elements) {
-      for (const child of element.elements) {
-        switch (child.name) {
-          case 'state':
-            if (!parallel.state) parallel.state = [];
-            parallel.state.push(this.parseStateElement(child));
-            break;
-          case 'parallel':
-            if (!parallel.parallel) parallel.parallel = [];
-            parallel.parallel.push(this.parseParallelElement(child));
-            break;
-          case 'onentry':
-            if (!parallel.onentry) parallel.onentry = [];
-            parallel.onentry.push(this.parseOnEntryElement(child));
-            break;
-          case 'onexit':
-            if (!parallel.onexit) parallel.onexit = [];
-            parallel.onexit.push(this.parseOnExitElement(child));
-            break;
-          case 'transition':
-            if (!parallel.transition) parallel.transition = [];
-            parallel.transition.push(this.parseTransitionElement(child));
-            break;
-          case 'invoke':
-            if (!parallel.invoke) parallel.invoke = [];
-            parallel.invoke.push(this.parseInvokeElement(child));
-            break;
-          case 'datamodel':
-            parallel.datamodel = this.parseDataModelElement(child);
-            break;
-          case 'history':
-            if (!parallel.history) parallel.history = [];
-            parallel.history.push(this.parseHistoryElement(child));
-            break;
+    // Parse child elements
+    for (const key of Object.keys(element)) {
+      if (key.startsWith('@_') || key === '#text' || key === '#cdata') continue;
+
+      const childElement = element[key];
+
+      switch (key) {
+        case 'state':
+          if (!parallel.state) parallel.state = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => parallel.state!.push(this.parseStateElement(child)));
+          } else {
+            parallel.state.push(this.parseStateElement(childElement));
+          }
+          break;
+        case 'parallel':
+          if (!parallel.parallel) parallel.parallel = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => parallel.parallel!.push(this.parseParallelElement(child)));
+          } else {
+            parallel.parallel.push(this.parseParallelElement(childElement));
+          }
+          break;
+        case 'onentry':
+          if (!parallel.onentry) parallel.onentry = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => parallel.onentry!.push(this.parseOnEntryElement(child)));
+          } else {
+            parallel.onentry.push(this.parseOnEntryElement(childElement));
+          }
+          break;
+        case 'onexit':
+          if (!parallel.onexit) parallel.onexit = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => parallel.onexit!.push(this.parseOnExitElement(child)));
+          } else {
+            parallel.onexit.push(this.parseOnExitElement(childElement));
+          }
+          break;
+        case 'transition':
+          if (!parallel.transition) parallel.transition = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => parallel.transition!.push(this.parseTransitionElement(child)));
+          } else {
+            parallel.transition.push(this.parseTransitionElement(childElement));
+          }
+          break;
+        case 'invoke':
+          if (!parallel.invoke) parallel.invoke = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => parallel.invoke!.push(this.parseInvokeElement(child)));
+          } else {
+            parallel.invoke.push(this.parseInvokeElement(childElement));
+          }
+          break;
+        case 'datamodel':
+          parallel.datamodel = this.parseDataModelElement(childElement);
+          break;
+        case 'history':
+          if (!parallel.history) parallel.history = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => parallel.history!.push(this.parseHistoryElement(child)));
+          } else {
+            parallel.history.push(this.parseHistoryElement(childElement));
+          }
+          break;
         }
       }
     }
@@ -294,26 +332,37 @@ export class SCXMLParser {
     return parallel;
   }
 
-  private parseFinalElement(element: Element): FinalElement {
-    const attributes = element.attributes || {};
+  private parseFinalElement(element: any): FinalElement {
     const finalElement: FinalElement = {
-      id: attributes.id as string
+      id: element['@_id'] || ''
     };
 
-    if (element.elements) {
-      for (const child of element.elements) {
-        switch (child.name) {
-          case 'onentry':
-            if (!finalElement.onentry) finalElement.onentry = [];
-            finalElement.onentry.push(this.parseOnEntryElement(child));
-            break;
-          case 'onexit':
-            if (!finalElement.onexit) finalElement.onexit = [];
-            finalElement.onexit.push(this.parseOnExitElement(child));
-            break;
-          case 'donedata':
-            finalElement.donedata = this.parseDoneDataElement(child);
-            break;
+    // Parse child elements
+    for (const key of Object.keys(element)) {
+      if (key.startsWith('@_') || key === '#text' || key === '#cdata') continue;
+
+      const childElement = element[key];
+
+      switch (key) {
+        case 'onentry':
+          if (!finalElement.onentry) finalElement.onentry = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => finalElement.onentry!.push(this.parseOnEntryElement(child)));
+          } else {
+            finalElement.onentry.push(this.parseOnEntryElement(childElement));
+          }
+          break;
+        case 'onexit':
+          if (!finalElement.onexit) finalElement.onexit = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => finalElement.onexit!.push(this.parseOnExitElement(child)));
+          } else {
+            finalElement.onexit.push(this.parseOnExitElement(childElement));
+          }
+          break;
+        case 'donedata':
+          finalElement.donedata = this.parseDoneDataElement(childElement);
+          break;
         }
       }
     }
