@@ -84,13 +84,25 @@ export class SCXMLParser {
     }
 
     if (Array.isArray(element)) {
-      const textNodes = element.filter((item) => item["#text"]);
-      if (textNodes.length > 0) {
-        return textNodes
-          .map((item) => item["#text"])
-          .join("")
-          .trim();
+      let content = "";
+      
+      for (const item of element) {
+        // Handle regular text content
+        if (item["#text"]) {
+          content += item["#text"];
+        }
+        
+        // Handle CDATA content (which contains nested text)
+        if (item["#cdata"] && Array.isArray(item["#cdata"])) {
+          for (const cdataItem of item["#cdata"]) {
+            if (cdataItem["#text"]) {
+              content += cdataItem["#text"];
+            }
+          }
+        }
       }
+      
+      return content || undefined;
     }
 
     return undefined;
@@ -530,6 +542,7 @@ export class SCXMLParser {
 
     // Handle object case (when element has attributes)
     if (attributes["@_src"]) script.src = attributes["@_src"];
+    
     const textContent = this.extractTextContent(elementArray);
     if (textContent !== undefined) script.content = textContent;
 
