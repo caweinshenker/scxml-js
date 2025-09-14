@@ -61,11 +61,10 @@ export class SCXMLParser {
 
     return elementArray
       .filter((item) => {
-        // Skip #text nodes and :@ attribute objects
+        // Skip #text nodes and standalone :@ attribute objects
         const keys = Object.keys(item);
-        return (
-          keys.length > 0 && !keys.includes("#text") && !keys.includes(":@")
-        );
+        // We want items that have element tags (not just #text or standalone :@)
+        return keys.some(key => key !== "#text" && key !== ":@");
       })
       .map((item) => {
         const tagName = Object.keys(item).find(
@@ -381,6 +380,7 @@ export class SCXMLParser {
   }
 
   private parseDataModelElement(elementArray: any[], attributes: any): DataModelElement {
+    
     const datamodel: DataModelElement = {};
 
     // Parse child elements using preserveOrder structure
@@ -422,25 +422,17 @@ export class SCXMLParser {
     if (attributes["@_autoforward"])
       invoke.autoforward = attributes["@_autoforward"] === "true";
 
-    // Parse child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
-
-      const childElement = element[key];
-
-      switch (key) {
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
         case "param":
           if (!invoke.param) invoke.param = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              invoke.param!.push(this.parseParamElement(child))
-            );
-          } else {
-            invoke.param.push(this.parseParamElement(childElement));
-          }
+          invoke.param.push(this.parseParamElement(child.element, child.attributes));
           break;
         case "content":
-          invoke.content = this.parseContentElement(childElement);
+          invoke.content = this.parseContentElement(child.element, child.attributes);
           break;
       }
     }
@@ -454,13 +446,12 @@ export class SCXMLParser {
       type: attributes["@_type"] as "shallow" | "deep",
     };
 
-    // Handle transition child element
-    if (element.transition) {
-      // History elements only have one transition, so we take the first one if it's an array
-      const transitionElement = Array.isArray(element.transition)
-        ? element.transition[0]
-        : element.transition;
-      history.transition = this.parseTransitionElement(transitionElement);
+    // Handle transition child element using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    const transitionChild = children.find(child => child.tagName === "transition");
+    
+    if (transitionChild) {
+      history.transition = this.parseTransitionElement(transitionChild.element, transitionChild.attributes);
     }
 
     return history;
@@ -497,25 +488,17 @@ export class SCXMLParser {
   private parseDoneDataElement(elementArray: any[], attributes: any): DoneDataElement {
     const donedata: DoneDataElement = {};
 
-    // Parse child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
-
-      const childElement = element[key];
-
-      switch (key) {
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
         case "content":
-          donedata.content = this.parseContentElement(childElement);
+          donedata.content = this.parseContentElement(child.element, child.attributes);
           break;
         case "param":
           if (!donedata.param) donedata.param = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              donedata.param!.push(this.parseParamElement(child))
-            );
-          } else {
-            donedata.param.push(this.parseParamElement(childElement));
-          }
+          donedata.param.push(this.parseParamElement(child.element, child.attributes));
           break;
       }
     }
@@ -643,25 +626,17 @@ export class SCXMLParser {
     if (attributes["@_delayexpr"]) send.delayexpr = attributes["@_delayexpr"];
     if (attributes["@_namelist"]) send.namelist = attributes["@_namelist"];
 
-    // Parse child elements
-    for (const key of Object.keys(element)) {
-      if (key.startsWith("@_") || key === "#text" || key === "#cdata") continue;
-
-      const childElement = element[key];
-
-      switch (key) {
+    // Parse child elements using preserveOrder structure
+    const children = this.getAllChildElements(elementArray);
+    
+    for (const child of children) {
+      switch (child.tagName) {
         case "param":
           if (!send.param) send.param = [];
-          if (Array.isArray(childElement)) {
-            childElement.forEach((child) =>
-              send.param!.push(this.parseParamElement(child))
-            );
-          } else {
-            send.param.push(this.parseParamElement(childElement));
-          }
+          send.param.push(this.parseParamElement(child.element, child.attributes));
           break;
         case "content":
-          send.content = this.parseContentElement(childElement);
+          send.content = this.parseContentElement(child.element, child.attributes);
           break;
       }
     }
