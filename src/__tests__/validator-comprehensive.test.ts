@@ -794,28 +794,22 @@ describe("SCXML Validator Comprehensive Tests", () => {
     it("should validate complex documents efficiently", () => {
       const builder = SCXMLBuilder.create().initial("root");
 
-      // Create deeply nested structure
-      let currentState = StateBuilder.create("root").initial("level0");
+      // Create root state with nested levels
+      const rootState = StateBuilder.create("root").initial("level0");
+      
+      // Create all level states as siblings (no initial attributes needed for siblings)
       for (let i = 0; i < 50; i++) {
-        const nextState = StateBuilder.create(`level${i}`).addTransition(
+        const levelState = StateBuilder.create(`level${i}`).addTransition(
           TransitionBuilder.create()
             .event(`event${i}`)
             .target(`level${(i + 1) % 50}`)
             .build()
         );
 
-        if (i < 49) {
-          nextState.initial(`level${i + 1}`);
-        }
-
-        currentState.addState(nextState.build());
-
-        if (i < 49) {
-          currentState = StateBuilder.create(`level${i + 1}`);
-        }
+        rootState.addState(levelState.build());
       }
 
-      const doc = builder.addState(currentState.build()).build();
+      const doc = builder.addState(rootState.build()).build();
 
       const start = Date.now();
       const errors = validator.validate(doc);

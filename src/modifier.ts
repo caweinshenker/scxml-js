@@ -257,23 +257,34 @@ export class SCXMLModifier {
   }
 
   private updateAllTransitionTargets(oldTarget: string, newTarget: string): void {
+    const updateTransitionTarget = (transition: any) => {
+      if (transition.target) {
+        // Handle exact matches
+        if (transition.target === oldTarget) {
+          transition.target = newTarget;
+        }
+        // Handle hierarchical path references (e.g., "../../level1alt" when renaming "level1alt")
+        else if (transition.target.endsWith('/' + oldTarget)) {
+          transition.target = transition.target.replace('/' + oldTarget, '/' + newTarget);
+        }
+        // Handle path that is exactly the old target after navigation (e.g., "../level1alt")
+        else if (transition.target.endsWith(oldTarget) && 
+                 (transition.target.endsWith('/' + oldTarget) || transition.target.startsWith('../'))) {
+          const prefix = transition.target.substring(0, transition.target.length - oldTarget.length);
+          transition.target = prefix + newTarget;
+        }
+      }
+    };
+
     this.walkAllStates((state) => {
       if (state.transition) {
-        state.transition.forEach(transition => {
-          if (transition.target === oldTarget) {
-            transition.target = newTarget;
-          }
-        });
+        state.transition.forEach(updateTransitionTarget);
       }
     });
 
     this.walkAllParallels((parallel) => {
       if (parallel.transition) {
-        parallel.transition.forEach(transition => {
-          if (transition.target === oldTarget) {
-            transition.target = newTarget;
-          }
-        });
+        parallel.transition.forEach(updateTransitionTarget);
       }
     });
   }

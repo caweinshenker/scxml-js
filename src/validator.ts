@@ -8,9 +8,11 @@ export interface ValidationError {
 
 export class SCXMLValidator {
   private errors: ValidationError[] = [];
+  private dataIds: Set<string> = new Set();
 
   validate(document: SCXMLDocument): ValidationError[] {
     this.errors = [];
+    this.dataIds = new Set();
     this.validateScxmlElement(document.scxml, 'scxml');
     return this.errors;
   }
@@ -61,25 +63,48 @@ export class SCXMLValidator {
       stateIds.add(state.id);
     }
 
+    // First collect child state IDs
     const childStateIds = new Set<string>();
-
-    state.state?.forEach((childState, index) => {
-      this.validateStateElement(childState, `${path}.state[${index}]`, childStateIds);
+    
+    state.state?.forEach((childState) => {
+      if (childState.id) {
+        childStateIds.add(childState.id);
+      }
     });
 
-    state.parallel?.forEach((parallel, index) => {
-      this.validateParallelElement(parallel, `${path}.parallel[${index}]`, childStateIds);
+    state.parallel?.forEach((parallel) => {
+      if (parallel.id) {
+        childStateIds.add(parallel.id);
+      }
     });
 
-    state.final?.forEach((finalState, index) => {
-      this.validateFinalElement(finalState, `${path}.final[${index}]`, childStateIds);
+    state.final?.forEach((finalState) => {
+      if (finalState.id) {
+        childStateIds.add(finalState.id);
+      }
     });
 
-    if (state.initial && childStateIds.size > 0) {
-      if (!childStateIds.has(state.initial)) {
+    // Validate initial state reference
+    if (state.initial) {
+      if (childStateIds.size === 0) {
+        this.addError(`Initial state "${state.initial}" does not exist in state "${state.id}" (no child states)`, path);
+      } else if (!childStateIds.has(state.initial)) {
         this.addError(`Initial state "${state.initial}" does not exist in state "${state.id}"`, path);
       }
     }
+
+    // Now validate child elements
+    state.state?.forEach((childState, index) => {
+      this.validateStateElement(childState, `${path}.state[${index}]`, stateIds);
+    });
+
+    state.parallel?.forEach((parallel, index) => {
+      this.validateParallelElement(parallel, `${path}.parallel[${index}]`, stateIds);
+    });
+
+    state.final?.forEach((finalState, index) => {
+      this.validateFinalElement(finalState, `${path}.final[${index}]`, stateIds);
+    });
 
     if (state.transition) {
       state.transition.forEach((transition, index) => {
@@ -108,7 +133,9 @@ export class SCXMLValidator {
       stateIds.add(parallel.id);
     }
 
-    if (!parallel.state || parallel.state.length < 2) {
+    // Count all child states (state + parallel)
+    const childCount = (parallel.state?.length || 0) + (parallel.parallel?.length || 0);
+    if (childCount < 2) {
       this.addError('Parallel element must contain at least two child states', path);
     }
 
@@ -158,14 +185,13 @@ export class SCXMLValidator {
 
   private validateDataModel(datamodel: any, path: string): void {
     if (datamodel.data) {
-      const dataIds = new Set<string>();
       datamodel.data.forEach((data: any, index: number) => {
         if (!data.id) {
           this.addError('Data element must have an id attribute', `${path}.data[${index}]`);
-        } else if (dataIds.has(data.id)) {
+        } else if (this.dataIds.has(data.id)) {
           this.addError(`Duplicate data id: ${data.id}`, `${path}.data[${index}]`);
         } else {
-          dataIds.add(data.id);
+          this.dataIds.add(data.id);
         }
       });
     }
