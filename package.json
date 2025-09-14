@@ -25,6 +25,19 @@
   ],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caweinshenker/scxml-js.git"
+  },
+  "homepage": "https://caweinshenker.github.io/scxml-js/",
+  "bugs": {
+    "url": "https://github.com/caweinshenker/scxml-js/issues"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "fast-xml-parser": "^5.2.5"
   },
