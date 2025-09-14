@@ -1,0 +1,71 @@
+{
+  "entryPoints": ["./src/index.ts"],
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "theme": "default",
+  "name": "SCXML TypeScript Parser",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeExternals": true,
+  "readme": "./README.md",
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Core",
+    "Builders",
+    "Modifiers",
+    "Validation",
+    "Serialization",
+    "Types",
+    "Utilities"
+  ],
+  "sort": ["source-order"],
+  "kindSortOrder": [
+    "Project",
+    "Module",
+    "Namespace",
+    "Enum",
+    "Variable",
+    "Function",
+    "Class",
+    "Interface",
+    "Constructor",
+    "Property",
+    "Method",
+    "CallSignature",
+    "IndexSignature",
+    "ConstructorSignature",
+    "GetSignature",
+    "SetSignature"
+  ],
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true
+  },
+  "searchInComments": true,
+  "cleanOutputDir": true,
+  "treatWarningsAsErrors": false,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "cname": "scxml-parser.dev",
+  "githubPages": true,
+  "sourceLinkTemplate": "https://github.com/caweinshenker/sxcml-js/blob/{gitRevision}/{path}#L{line}",
+  "gitRevision": "main",
+  "gitRemote": "origin",
+  "gaID": "G-XXXXXXXXXX",
+  "hideGenerator": false,
+  "customCss": "./docs-theme/custom.css",
+  "includes": "./docs-theme/",
+  "exclude": [
+    "**/__tests__/**/*",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  "externalPattern": [
+    "**/node_modules/**",
+    "**/dist/**"
+  ]
+}

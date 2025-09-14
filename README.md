@@ -1,6 +1,6 @@
 # SCXML TypeScript Parser
 
-A comprehensive TypeScript library for parsing, creating, modifying, validating, and converting SCXML (State Chart XML) documents, with seamless integration to XState for AI agent world modeling and state machine execution.
+A comprehensive TypeScript library for parsing, creating, modifying, validating, and serializing SCXML (State Chart XML) documents with full W3C specification support.
 
 ## Features
 
@@ -8,15 +8,15 @@ A comprehensive TypeScript library for parsing, creating, modifying, validating,
 - 🏗️ **Builder API**: Fluent, type-safe API for creating SCXML documents
 - 🔧 **Modification API**: Programmatically modify existing SCXML documents
 - ✅ **Validation**: Comprehensive validation with detailed error reporting
-- 🔄 **XState Integration**: Convert SCXML to XState machines for execution
 - 📝 **XML Serialization**: Convert SCXML documents back to XML
 - 🎯 **TypeScript**: Full TypeScript support with complete type definitions
-- 🤖 **AI-Ready**: Designed for AI agents to create and manage their own world models
+- ⚡ **Performance**: Efficient parsing and manipulation of large state machines
+- 🧪 **Well Tested**: Comprehensive test suite with edge case coverage
 
 ## Installation
 
 ```bash
-npm install scxml-parser
+npm install @scxml/parser
 ```
 
 ## Quick Start
@@ -24,7 +24,7 @@ npm install scxml-parser
 ### Creating SCXML Documents
 
 ```typescript
-import { SCXML } from 'scxml-parser';
+import { SCXML } from '@scxml/parser';
 
 // Create a simple state machine
 const document = SCXML.create()
@@ -54,7 +54,7 @@ const document = SCXML.create()
 ### Parsing Existing SCXML
 
 ```typescript
-import { SCXML } from 'scxml-parser';
+import { SCXML } from '@scxml/parser';
 
 const xmlString = `
 <scxml initial="idle" xmlns="http://www.w3.org/2005/07/scxml">
@@ -69,22 +69,20 @@ const xmlString = `
 const document = SCXML.parse(xmlString);
 ```
 
-### Converting to XState
+### Serializing to XML
 
 ```typescript
-import { SCXML } from 'scxml-parser';
+import { SCXML } from '@scxml/parser';
 
-// Convert SCXML document to XState machine
-const machine = SCXML.createMachine(document);
-
-// Or get the configuration
-const xstateConfig = SCXML.toXState(document);
+// Convert document back to XML
+const xml = SCXML.serialize(document, { spaces: 2 });
+console.log(xml);
 ```
 
 ### Modifying Documents
 
 ```typescript
-import { SCXML } from 'scxml-parser';
+import { SCXML } from '@scxml/parser';
 
 const modifier = SCXML.modify(document)
   .addState(SCXML.state('error')
@@ -100,86 +98,111 @@ const modifier = SCXML.modify(document)
 const modifiedDocument = modifier.getDocument();
 ```
 
-## AI Agent World Model Example
+## Complex Example: Chatbot State Machine
 
-This library is particularly well-suited for AI agents to create and manage their own world models:
+Here's a more complex example showing a chatbot conversation flow:
 
 ```typescript
-import { SCXML } from 'scxml-parser';
+import { SCXML } from '@scxml/parser';
 
-// AI agent creates its world model
-const agentWorldModel = SCXML.create()
-  .name('ai-agent-world-model')
-  .initial('initializing')
+// Create a chatbot conversation state machine
+const chatbotModel = SCXML.create()
+  .name('chatbot-dialogue')
+  .initial('greeting')
   .datamodel('ecmascript')
   .addDataModel(SCXML.dataModel()
-    .addData(SCXML.data('currentTask').expr('null').build())
-    .addData(SCXML.data('confidence').expr('0.0').build())
-    .addData(SCXML.data('worldKnowledge').content('{}').build())
+    .addData(SCXML.data('userName').expr('null').build())
+    .addData(SCXML.data('conversationContext').content('{}').build())
+    .addData(SCXML.data('confidenceScore').expr('0.8').build())
     .build())
-  .addState(SCXML.state('initializing')
+  .addState(SCXML.state('greeting')
     .addOnEntry(SCXML.onEntry()
-      .addLog({ label: 'Agent initializing' })
-      .addAssign({ location: 'confidence', expr: '0.1' })
+      .addLog({ label: 'Bot: Hello! How can I help you today?' })
+      .addSend({ event: 'bot.message', target: 'ui' })
       .build())
     .addTransition(SCXML.transition()
-      .event('ready')
-      .target('idle')
+      .event('user.message')
+      .target('understanding')
+      .addAssign({ location: 'conversationContext.lastUserMessage', expr: '_event.data.text' })
       .build())
     .build())
-  .addState(SCXML.state('idle')
-    .addTransition(SCXML.transition()
-      .event('task.assigned')
-      .target('processing')
-      .addAssign({ location: 'currentTask', expr: '_event.data.task' })
-      .build())
-    .build())
-  .addState(SCXML.state('processing')
-    .addParallel(SCXML.parallel('cognitive-processes')
-      .addState(SCXML.state('understanding')
-        .addInvoke(SCXML.invoke()
-          .type('http')
-          .src('/ai/nlp/understand')
-          .build())
-        .build())
-      .addState(SCXML.state('planning')
-        .addOnEntry(SCXML.onEntry()
-          .addLog({ label: 'Creating execution plan' })
-          .build())
-        .build())
+  .addState(SCXML.state('understanding')
+    .addInvoke(SCXML.invoke()
+      .id('nlp-service')
+      .type('http')
+      .src('/api/nlp/understand')
+      .addParam({ name: 'text', expr: 'conversationContext.lastUserMessage' })
       .build())
     .addTransition(SCXML.transition()
-      .event('task.completed')
-      .target('reporting')
+      .event('nlp.understood')
+      .target('responding')
+      .addAssign({ location: 'conversationContext.intent', expr: '_event.data.intent' })
+      .build())
+    .addTransition(SCXML.transition()
+      .event('nlp.error')
+      .target('fallback')
       .build())
     .build())
-  .addState(SCXML.state('reporting')
+  .addState(SCXML.state('responding')
+    .addTransition(SCXML.transition()
+      .event('confidence.high')
+      .cond('confidenceScore > 0.7')
+      .target('generating-response')
+      .build())
+    .addTransition(SCXML.transition()
+      .event('confidence.low')
+      .cond('confidenceScore <= 0.3')
+      .target('fallback')
+      .build())
+    .build())
+  .addState(SCXML.state('generating-response')
     .addOnEntry(SCXML.onEntry()
-      .addSend({ event: 'task.report', target: 'supervisor' })
+      .addLog({ label: 'Generating response' })
       .build())
     .addTransition(SCXML.transition()
-      .event('report.sent')
-      .target('idle')
+      .event('response.ready')
+      .target('delivering')
       .build())
     .build())
+  .addState(SCXML.state('delivering')
+    .addOnEntry(SCXML.onEntry()
+      .addSend({ event: 'bot.message', target: 'ui' })
+      .build())
+    .addTransition(SCXML.transition()
+      .event('message.delivered')
+      .target('waiting')
+      .build())
+    .build())
+  .addState(SCXML.state('waiting')
+    .addTransition(SCXML.transition()
+      .event('user.message')
+      .target('understanding')
+      .build())
+    .addTransition(SCXML.transition()
+      .event('conversation.end')
+      .target('goodbye')
+      .build())
+    .build())
+  .addState(SCXML.state('fallback')
+    .addOnEntry(SCXML.onEntry()
+      .addLog({ label: 'Using fallback response' })
+      .build())
+    .addTransition(SCXML.transition()
+      .event('user.message')
+      .target('understanding')
+      .build())
+    .build())
+  .addFinal({ id: 'goodbye' })
   .build();
 
-// Convert to XState for execution
-const machine = SCXML.createMachine(agentWorldModel);
+// Validate the state machine
+const errors = SCXML.validate(chatbotModel);
+if (errors.length > 0) {
+  console.log('Validation errors:', errors);
+}
 
-// Agent can modify its world model dynamically
-const modifier = SCXML.modify(agentWorldModel);
-modifier.addState(SCXML.state('learning')
-  .addOnEntry(SCXML.onEntry()
-    .addLog({ label: 'Updating world knowledge' })
-    .addAssign({
-      location: 'worldKnowledge.lastUpdate',
-      expr: 'Date.now()'
-    })
-    .build())
-  .build());
-
-const updatedModel = modifier.getDocument();
+// Serialize to XML for storage or transmission
+const xml = SCXML.serialize(chatbotModel, { spaces: 2 });
 ```
 
 ## API Reference
@@ -201,11 +224,6 @@ Serializes an SCXML document to XML string.
 #### `SCXML.modify(document: SCXMLDocument)`
 Creates a modifier for programmatically changing SCXML documents.
 
-#### `SCXML.toXState(document: SCXMLDocument, options?: ConversionOptions)`
-Converts SCXML document to XState configuration.
-
-#### `SCXML.createMachine(document: SCXMLDocument, options?: any)`
-Creates an XState machine from SCXML document.
 
 ### Builders
 

@@ -1,0 +1,269 @@
+/* Custom styling for SCXML Parser Documentation */
+
+:root {
+  --color-primary: #2563eb;
+  --color-primary-light: #3b82f6;
+  --color-secondary: #059669;
+  --color-accent: #dc2626;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+  --border-radius: 8px;
+  --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', monospace;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #334155;
+  }
+}
+
+/* Header styling */
+.tsd-page-title {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  border-radius: var(--border-radius);
+}
+
+.tsd-page-title h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Navigation improvements */
+.tsd-navigation {
+  position: sticky;
+  top: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+}
+
+.tsd-navigation .tsd-nav-link {
+  padding: 0.5rem 1rem;
+  border-radius: calc(var(--border-radius) / 2);
+  transition: all 0.2s ease;
+}
+
+.tsd-navigation .tsd-nav-link:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: translateX(4px);
+}
+
+/* Code blocks */
+.tsd-signature {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin: 1rem 0;
+  font-family: var(--font-family-mono);
+  line-height: 1.5;
+}
+
+.tsd-signature-type {
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
+.tsd-signature-symbol {
+  color: var(--color-accent);
+}
+
+/* Method and property cards */
+.tsd-member {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.tsd-member:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.tsd-member-name {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Category headers */
+.tsd-index-group .tsd-index-link {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 1rem 0 0.5rem 0;
+  display: block;
+}
+
+/* Example code blocks */
+.tsd-example {
+  background: #f7fafc;
+  border-left: 4px solid var(--color-primary);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.tsd-example code {
+  background: transparent;
+  padding: 0;
+}
+
+/* Tags and badges */
+.tsd-tag {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: calc(var(--border-radius) / 2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tsd-tag.tsd-tag-deprecated {
+  background: var(--color-accent);
+}
+
+.tsd-tag.tsd-tag-experimental {
+  background: #f59e0b;
+}
+
+.tsd-tag.tsd-tag-beta {
+  background: var(--color-secondary);
+}
+
+/* Parameter tables */
+.tsd-parameters {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.tsd-parameters th,
+.tsd-parameters td {
+  border: 1px solid var(--color-border);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.tsd-parameters th {
+  background: var(--color-surface);
+  font-weight: 600;
+}
+
+.tsd-parameters code {
+  background: var(--color-surface);
+  padding: 0.25rem 0.5rem;
+  border-radius: calc(var(--border-radius) / 2);
+  font-family: var(--font-family-mono);
+}
+
+/* Search improvements */
+.tsd-search input {
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 0.75rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.tsd-search input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Footer */
+.tsd-generator {
+  background: var(--color-surface);
+  padding: 2rem;
+  margin-top: 3rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tsd-page-title h1 {
+    font-size: 2rem;
+  }
+
+  .tsd-member {
+    padding: 1rem;
+  }
+
+  .tsd-navigation {
+    position: static;
+    margin-bottom: 2rem;
+  }
+}
+
+/* Accessibility improvements */
+.tsd-nav-link:focus,
+.tsd-member:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Animation for smooth interactions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Special styling for SCXML-specific content */
+.scxml-state-machine {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border: 2px solid var(--color-primary-light);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.scxml-example {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.scxml-example::before {
+  content: "SCXML Example";
+  position: absolute;
+  top: -0.5rem;
+  left: 1rem;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: calc(var(--border-radius) / 2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
