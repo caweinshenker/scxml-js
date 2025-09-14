@@ -47,11 +47,10 @@ export class SCXMLParser {
       ignoreAttributes: false,
       attributeNamePrefix: '@_',
       textNodeName: '#text',
-      cdataTagName: '#cdata',
+      cdataPropName: '#cdata',
       parseAttributeValue: false,
       parseTagValue: false,
-      trimValues: false,
-      parseTrueNumberOnly: false
+      trimValues: false
     });
 
     const result = parser.parse(xmlString);
@@ -428,27 +427,34 @@ export class SCXMLParser {
     return data;
   }
 
-  private parseInvokeElement(element: Element): InvokeElement {
-    const attributes = element.attributes || {};
+  private parseInvokeElement(element: any): InvokeElement {
     const invoke: InvokeElement = {};
 
-    if (attributes.type) invoke.type = attributes.type as string;
-    if (attributes.src) invoke.src = attributes.src as string;
-    if (attributes.id) invoke.id = attributes.id as string;
-    if (attributes.idlocation) invoke.idlocation = attributes.idlocation as string;
-    if (attributes.srcexpr) invoke.srcexpr = attributes.srcexpr as string;
-    if (attributes.autoforward) invoke.autoforward = attributes.autoforward === 'true';
+    if (element['@_type']) invoke.type = element['@_type'];
+    if (element['@_src']) invoke.src = element['@_src'];
+    if (element['@_id']) invoke.id = element['@_id'];
+    if (element['@_idlocation']) invoke.idlocation = element['@_idlocation'];
+    if (element['@_srcexpr']) invoke.srcexpr = element['@_srcexpr'];
+    if (element['@_autoforward']) invoke.autoforward = element['@_autoforward'] === 'true';
 
-    if (element.elements) {
-      for (const child of element.elements) {
-        switch (child.name) {
-          case 'param':
-            if (!invoke.param) invoke.param = [];
-            invoke.param.push(this.parseParamElement(child));
-            break;
-          case 'content':
-            invoke.content = this.parseContentElement(child);
-            break;
+    // Parse child elements
+    for (const key of Object.keys(element)) {
+      if (key.startsWith('@_') || key === '#text' || key === '#cdata') continue;
+
+      const childElement = element[key];
+
+      switch (key) {
+        case 'param':
+          if (!invoke.param) invoke.param = [];
+          if (Array.isArray(childElement)) {
+            childElement.forEach(child => invoke.param!.push(this.parseParamElement(child)));
+          } else {
+            invoke.param.push(this.parseParamElement(childElement));
+          }
+          break;
+        case 'content':
+          invoke.content = this.parseContentElement(childElement);
+          break;
         }
       }
     }
@@ -456,19 +462,17 @@ export class SCXMLParser {
     return invoke;
   }
 
-  private parseHistoryElement(element: Element): HistoryElement {
-    const attributes = element.attributes || {};
+  private parseHistoryElement(element: any): HistoryElement {
     const history: HistoryElement = {
-      id: attributes.id as string,
-      type: attributes.type as 'shallow' | 'deep'
+      id: element['@_id'] || '',
+      type: element['@_type'] as 'shallow' | 'deep'
     };
 
-    if (element.elements) {
-      for (const child of element.elements) {
-        if (child.name === 'transition') {
-          history.transition = this.parseTransitionElement(child);
-        }
-      }
+    // Handle transition child element
+    if (element.transition) {
+      // History elements only have one transition, so we take the first one if it's an array
+      const transitionElement = Array.isArray(element.transition) ? element.transition[0] : element.transition;
+      history.transition = this.parseTransitionElement(transitionElement);
     }
 
     return history;
