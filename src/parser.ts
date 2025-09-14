@@ -33,8 +33,11 @@ export class SCXMLParser {
       throw new Error("Invalid XML characters detected");
     }
 
+    // Trim leading/trailing whitespace to handle XML declarations and processing instructions
+    const trimmedXml = xmlString.trim();
+
     // Validate XML structure first
-    const validation = XMLValidator.validate(xmlString, {
+    const validation = XMLValidator.validate(trimmedXml, {
       allowBooleanAttributes: true,
     });
 
@@ -53,7 +56,7 @@ export class SCXMLParser {
       trimValues: false,
     });
 
-    const result = parser.parse(xmlString);
+    const result = parser.parse(trimmedXml);
 
     if (!result.scxml) {
       throw new Error("No scxml root element found");
@@ -536,6 +539,13 @@ export class SCXMLParser {
   private parseContentElement(element: any): ContentElement {
     const content: ContentElement = {};
 
+    // Handle the case where fast-xml-parser returns a string directly for text-only elements
+    if (typeof element === 'string') {
+      content.content = element;
+      return content;
+    }
+
+    // Handle object case (when element has attributes)
     if (element["@_expr"]) content.expr = element["@_expr"];
     const textContent = this.extractTextContent(element);
     if (textContent !== undefined) content.content = textContent;
@@ -575,6 +585,13 @@ export class SCXMLParser {
   private parseScriptElement(element: any): ScriptElement {
     const script: ScriptElement = {};
 
+    // Handle the case where fast-xml-parser returns a string directly for text-only elements
+    if (typeof element === 'string') {
+      script.content = element;
+      return script;
+    }
+
+    // Handle object case (when element has attributes)
     if (element["@_src"]) script.src = element["@_src"];
     const textContent = this.extractTextContent(element);
     if (textContent !== undefined) script.content = textContent;
