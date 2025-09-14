@@ -11,7 +11,7 @@ For the complete API documentation, please see our [TypeDoc-generated documentat
 ## Main Classes
 
 - **SCXMLParser** - Parse SCXML documents from XML strings
-- **SCXMLSerializer** - Serialize SCXML documents to XML 
+- **SCXMLSerializer** - Serialize SCXML documents to XML
 - **SCXMLValidator** - Validate SCXML documents
 - **SCXMLModifier** - Modify existing SCXML documents
 - **SCXMLBuilder** - Build new SCXML documents
@@ -19,7 +19,7 @@ For the complete API documentation, please see our [TypeDoc-generated documentat
 ## Builder Classes
 
 - **StateBuilder** - Build state elements
-- **TransitionBuilder** - Build transition elements  
+- **TransitionBuilder** - Build transition elements
 - **DataBuilder** - Build data elements
 - **ParallelBuilder** - Build parallel elements
 

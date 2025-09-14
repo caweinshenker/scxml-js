@@ -74,7 +74,7 @@ console.log(xml);
 ## What's Next?
 
 - [Learn the core concepts](./concepts) of SCXML and this library
-- [Follow the tutorial](./tutorial) to build your first state machine
+- [See practical examples](./examples) to build your first state machine
 - [Explore the API reference](../api) for detailed documentation
 - [See more examples](./examples) for common use cases
 

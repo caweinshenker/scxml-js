@@ -110,6 +110,6 @@ errors.forEach(error => {
 
 ## Next Steps
 
-- [Learn how to create documents](./tutorial) with the builder API
+- [See practical examples](./examples) with the builder API
 - [See practical examples](./examples) of common patterns
 - [Explore the full API](../api) for detailed reference
