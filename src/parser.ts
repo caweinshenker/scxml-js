@@ -129,12 +129,25 @@ export class SCXMLParser {
     const result = parser.parse(trimmedXml);
 
     // With preserveOrder, result is an array
-    if (!Array.isArray(result) || result.length === 0 || !result[0].scxml) {
+    if (!Array.isArray(result) || result.length === 0) {
       throw new Error("No scxml root element found");
     }
 
-    const scxmlData = result[0].scxml;
-    const scxmlAttributes = result[0][":@"] || {};
+    // Find the scxml element (may not be at index 0 if there's an XML declaration)
+    let scxmlElement = null;
+    for (const element of result) {
+      if (element.scxml) {
+        scxmlElement = element;
+        break;
+      }
+    }
+
+    if (!scxmlElement) {
+      throw new Error("No scxml root element found");
+    }
+
+    const scxmlData = scxmlElement.scxml;
+    const scxmlAttributes = scxmlElement[":@"] || {};
 
     return {
       scxml: this.parseScxmlElement(scxmlData, scxmlAttributes),

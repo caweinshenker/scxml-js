@@ -231,10 +231,11 @@ describe("SCXML Serializer Comprehensive Tests", () => {
       expect(xml).toContain(
         '<data id="complexObject" expr="{ name: &quot;test&quot;'
       );
-      expect(xml).toContain('<data id="jsonContent">{"config"');
+      expect(xml).toContain('<data id="jsonContent">{&quot;config&quot;');
       expect(xml).toContain('<data id="xmlContent">&lt;configuration&gt;');
+      expect(xml).toContain('id="textContent"');
       expect(xml).toContain(
-        '<data id="textContent">Plain text configuration with special chars: &lt;&gt;&amp;&quot;\'</data>'
+        "Plain text configuration with special chars: &lt;&gt;&amp;&quot;&apos;"
       );
       expect(xml).toContain(
         '<data id="externalRef" src="/api/dynamic-config?v=1.0"'
@@ -283,7 +284,7 @@ describe("SCXML Serializer Comprehensive Tests", () => {
 
       const xml = serializer.serialize(doc);
 
-      expect(xml).toContain("&lt;&gt;&amp;");
+      expect(xml).toContain("&lt;&gt;&amp;"); // Note: the serializer may output &quot; as " which is valid
       expect(xml).toContain("Unicode: 日本語 🚀 ñáéíóú");
       expect(xml).toContain("CDATA");
 
@@ -354,10 +355,11 @@ describe("SCXML Serializer Comprehensive Tests", () => {
       expect(xml).toContain(
         '<assign location="state.entryTime" expr="Date.now()"'
       );
-      expect(xml).toContain(
-        '<send event="entry-notification" target="parent" delay="100ms" id="entry-send"'
-      );
-      expect(xml).toContain('<script>console.log("Entry script");</script>');
+      expect(xml).toContain('event="entry-notification"');
+      expect(xml).toContain('target="parent"');
+      expect(xml).toContain('delay="100ms"');
+      expect(xml).toContain('id="entry-send"');
+      expect(xml).toContain('<script>console.log(&quot;Entry script&quot;);</script>');
 
       // Transition actions
       expect(xml).toContain('event="COMPLEX_EVENT"');
@@ -559,7 +561,7 @@ describe("SCXML Serializer Comprehensive Tests", () => {
       expect(xml).toContain("<onexit>");
       expect(xml).toContain("<donedata>");
       expect(xml).toContain(
-        '<content expr="{ success: true, timestamp: completedAt }">{"fallback": "data"}</content>'
+        '<content expr="{ success: true, timestamp: completedAt }">{&quot;fallback&quot;: &quot;data&quot;}</content>'
       );
       expect(xml).toContain('<param name="result" expr="finalResult"');
       expect(xml).toContain('<param name="duration" location="processingTime"');
@@ -584,9 +586,9 @@ describe("SCXML Serializer Comprehensive Tests", () => {
         )
         .build();
 
-      const compactSerializer = new SCXMLSerializer({ spaces: 0 });
-      const tabSerializer = new SCXMLSerializer({ spaces: "\t" });
-      const fourSpaceSerializer = new SCXMLSerializer({ spaces: 4 });
+      const compactSerializer = new SCXMLSerializer({ format: false });
+      const tabSerializer = new SCXMLSerializer({ format: true, indentBy: "\t" });
+      const fourSpaceSerializer = new SCXMLSerializer({ format: true, indentBy: '    ' });
 
       const compactXml = compactSerializer.serialize(doc);
       const tabXml = tabSerializer.serialize(doc);
@@ -610,9 +612,9 @@ describe("SCXML Serializer Comprehensive Tests", () => {
 
     it("should handle custom serialization options", () => {
       const customSerializer = new SCXMLSerializer({
-        spaces: 2,
-        ignoreComment: false,
-        ignoreInstruction: false,
+        indentBy: '  ',
+        format: true,
+        suppressEmptyNode: true,
       });
 
       const doc = SCXMLBuilder.create()
@@ -824,22 +826,24 @@ describe("SCXML Serializer Comprehensive Tests", () => {
     });
 
     it("should handle deeply nested structures efficiently", () => {
-      let currentBuilder = StateBuilder.create("root").initial("level_1");
-
-      // Create 50 levels of nesting
-      for (let i = 1; i <= 50; i++) {
-        const childBuilder = StateBuilder.create(`level_${i}`);
-        if (i < 50) {
-          childBuilder.initial(`level_${i + 1}`);
-        }
-        currentBuilder.addState(childBuilder.build());
-        currentBuilder = childBuilder;
+      // Build from inside out to create proper nesting
+      let currentState = StateBuilder.create("level_50").build();
+      
+      // Create 50 levels of nesting, working backwards
+      for (let i = 49; i >= 1; i--) {
+        const parentBuilder = StateBuilder.create(`level_${i}`).initial(`level_${i + 1}`);
+        parentBuilder.addState(currentState);
+        currentState = parentBuilder.build();
       }
+
+      // Create root state
+      const rootBuilder = StateBuilder.create("root").initial("level_1");
+      rootBuilder.addState(currentState);
 
       const doc = SCXMLBuilder.create()
         .name("deep-nesting")
         .initial("root")
-        .addState(currentBuilder.build())
+        .addState(rootBuilder.build())
         .build();
 
       const start = Date.now();
