@@ -1,5 +1,5 @@
 .claude/
 node_modules/
 dist/
-docs/
+/docs/
 docs-md/
