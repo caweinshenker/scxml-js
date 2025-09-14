@@ -540,7 +540,7 @@ export class SCXMLParser {
     const content: ContentElement = {};
 
     // Handle the case where fast-xml-parser returns a string directly for text-only elements
-    if (typeof element === 'string') {
+    if (typeof element === "string") {
       content.content = element;
       return content;
     }
@@ -586,7 +586,7 @@ export class SCXMLParser {
     const script: ScriptElement = {};
 
     // Handle the case where fast-xml-parser returns a string directly for text-only elements
-    if (typeof element === 'string') {
+    if (typeof element === "string") {
       script.content = element;
       return script;
     }
