@@ -359,7 +359,9 @@ describe("SCXML Serializer Comprehensive Tests", () => {
       expect(xml).toContain('target="parent"');
       expect(xml).toContain('delay="100ms"');
       expect(xml).toContain('id="entry-send"');
-      expect(xml).toContain('<script>console.log(&quot;Entry script&quot;);</script>');
+      expect(xml).toContain(
+        "<script>console.log(&quot;Entry script&quot;);</script>"
+      );
 
       // Transition actions
       expect(xml).toContain('event="COMPLEX_EVENT"');
@@ -587,8 +589,14 @@ describe("SCXML Serializer Comprehensive Tests", () => {
         .build();
 
       const compactSerializer = new SCXMLSerializer({ format: false });
-      const tabSerializer = new SCXMLSerializer({ format: true, indentBy: "\t" });
-      const fourSpaceSerializer = new SCXMLSerializer({ format: true, indentBy: '    ' });
+      const tabSerializer = new SCXMLSerializer({
+        format: true,
+        indentBy: "\t",
+      });
+      const fourSpaceSerializer = new SCXMLSerializer({
+        format: true,
+        indentBy: "    ",
+      });
 
       const compactXml = compactSerializer.serialize(doc);
       const tabXml = tabSerializer.serialize(doc);
@@ -612,7 +620,7 @@ describe("SCXML Serializer Comprehensive Tests", () => {
 
     it("should handle custom serialization options", () => {
       const customSerializer = new SCXMLSerializer({
-        indentBy: '  ',
+        indentBy: "  ",
         format: true,
         suppressEmptyNode: true,
       });
@@ -828,10 +836,12 @@ describe("SCXML Serializer Comprehensive Tests", () => {
     it("should handle deeply nested structures efficiently", () => {
       // Build from inside out to create proper nesting
       let currentState = StateBuilder.create("level_50").build();
-      
+
       // Create 50 levels of nesting, working backwards
       for (let i = 49; i >= 1; i--) {
-        const parentBuilder = StateBuilder.create(`level_${i}`).initial(`level_${i + 1}`);
+        const parentBuilder = StateBuilder.create(`level_${i}`).initial(
+          `level_${i + 1}`
+        );
         parentBuilder.addState(currentState);
         currentState = parentBuilder.build();
       }
