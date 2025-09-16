@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml name="logger" version="1.0" datamodel="ecmascript" initial="ready">
+
+  <datamodel>
+    <data id="logLevel" expr="'info'"/>
+    <data id="logCount" expr="0"/>
+  </datamodel>
+
+  <state id="ready">
+    <onentry>
+      <log label="Logger" expr="'Logger module ready, level: ' + logLevel"/>
+    </onentry>
+
+    <transition event="log.info" target="logging">
+      <assign location="logLevel" expr="'info'"/>
+    </transition>
+
+    <transition event="log.warn" target="logging">
+      <assign location="logLevel" expr="'warn'"/>
+    </transition>
+
+    <transition event="log.error" target="logging">
+      <assign location="logLevel" expr="'error'"/>
+    </transition>
+  </state>
+
+  <state id="logging">
+    <onentry>
+      <assign location="logCount" expr="logCount + 1"/>
+      <log label="Log" expr="'[' + logLevel + '] Message logged (count: ' + logCount + ')'"/>
+    </onentry>
+
+    <transition target="ready"/>
+  </state>
+
+</scxml>

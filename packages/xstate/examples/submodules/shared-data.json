@@ -1,0 +1,10 @@
+{
+  "maxRetries": 3,
+  "timeout": 5000,
+  "apiEndpoint": "https://api.example.com",
+  "errorMessages": {
+    "timeout": "Request timed out",
+    "network": "Network error occurred",
+    "server": "Server error"
+  }
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml name="main-with-submodules" version="1.0" datamodel="ecmascript" initial="init">
+
+  <datamodel>
+    <data id="config" src="shared-data.json"/>
+    <data id="processCount" expr="0"/>
+    <data id="status" expr="'starting'"/>
+  </datamodel>
+
+  <state id="init">
+    <onentry>
+      <assign location="status" expr="'initializing'"/>
+      <log label="Main" expr="'Initializing with config: ' + config"/>
+    </onentry>
+    <transition target="processing"/>
+  </state>
+
+  <state id="processing">
+    <onentry>
+      <assign location="status" expr="'processing'"/>
+      <assign location="processCount" expr="processCount + 1"/>
+      <log label="Main" expr="'Processing iteration: ' + processCount"/>
+    </onentry>
+
+    <!-- Invoke the logger sub-module -->
+    <invoke type="scxml" src="logger-module.scxml" id="logger">
+      <param name="logLevel" expr="'info'"/>
+    </invoke>
+
+    <transition event="process.next" target="processing" cond="processCount &lt; 3">
+      <send target="logger" event="log.info"/>
+    </transition>
+
+    <transition event="process.next" target="completed" cond="processCount >= 3">
+      <send target="logger" event="log.warn"/>
+    </transition>
+
+    <transition event="process.error" target="error">
+      <send target="logger" event="log.error"/>
+    </transition>
+  </state>
+
+  <state id="error">
+    <onentry>
+      <assign location="status" expr="'error'"/>
+      <log label="Main" expr="'Error state reached'"/>
+    </onentry>
+    <transition event="retry" target="processing" cond="processCount &lt; config.maxRetries"/>
+    <transition event="retry" target="failed"/>
+  </state>
+
+  <final id="completed">
+    <onentry>
+      <assign location="status" expr="'completed'"/>
+      <log label="Main" expr="'Process completed successfully'"/>
+    </onentry>
+  </final>
+
+  <final id="failed">
+    <onentry>
+      <assign location="status" expr="'failed'"/>
+      <log label="Main" expr="'Process failed after retries'"/>
+    </onentry>
+  </final>
+
+</scxml>

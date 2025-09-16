@@ -45,6 +45,13 @@ export * from './types';
 export { SCXMLParser } from './parser';
 
 /**
+ * Module resolver for handling external SCXML references.
+ *
+ * @group Core
+ */
+export { SCXMLModuleResolver, ResolverOptions, ResolvedContent } from './module-resolver';
+
+/**
  * Fluent API builders for creating SCXML documents programmatically.
  *
  * These builders provide a type-safe, fluent interface for constructing
