@@ -1,0 +1,80 @@
+name: '@scxml/xstate Package CI'
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'packages/xstate/**'
+      - '.github/workflows/xstate-package.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'packages/xstate/**'
+      - '.github/workflows/xstate-package.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install root dependencies
+      run: npm ci
+
+    - name: Install @scxml/xstate dependencies
+      working-directory: ./packages/xstate
+      run: npm ci
+
+    - name: Run lint
+      working-directory: ./packages/xstate
+      run: npm run lint
+
+    - name: Run tests
+      working-directory: ./packages/xstate
+      run: npm test -- --coverage
+
+    - name: Build package
+      working-directory: ./packages/xstate
+      run: npm run build
+
+    - name: Upload coverage reports
+      if: matrix.node-version == '20.x'
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./packages/xstate/coverage/lcov.info
+        flags: xstate-package
+        name: scxml-xstate
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install root dependencies
+      run: npm ci
+
+    - name: Install @scxml/xstate dependencies
+      working-directory: ./packages/xstate
+      run: npm ci
+
+    - name: Type check
+      working-directory: ./packages/xstate
+      run: npx tsc --noEmit
