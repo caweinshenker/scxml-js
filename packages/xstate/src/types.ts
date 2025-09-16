@@ -72,8 +72,8 @@ export interface XStateInvoke {
 export interface ConversionContext {
   scxmlDocument: SCXMLDocument;
   options: ConversionOptions;
-  actions: Map<string, XStateAction>;
-  guards: Map<string, XStateGuard>;
+  actions: Map<string, XStateAction | Function>;
+  guards: Map<string, XStateGuard | Function>;
   services: Map<string, any>;
   dataModel: Map<string, any>;
   errors: ConversionError[];
@@ -99,8 +99,8 @@ export interface ConversionWarning {
 
 export interface ConversionResult {
   machine: XStateMachineConfig;
-  actions: Record<string, XStateAction>;
-  guards: Record<string, XStateGuard>;
+  actions: Record<string, XStateAction | Function>;
+  guards: Record<string, XStateGuard | Function>;
   services: Record<string, any>;
   context: Record<string, any>;
   errors: ConversionError[];

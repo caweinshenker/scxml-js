@@ -20,8 +20,11 @@ import {
   XStateAction,
   XStateInvoke
 } from './types';
+import { SCXMLExpressionParser } from './expression-parser';
 
 export class SCXMLToXStateConverter {
+  private expressionParser = new SCXMLExpressionParser();
+
   private defaultOptions: ConversionOptions = {
     useSetupAPI: true,
     generateTypes: true,
@@ -236,9 +239,9 @@ export class SCXMLToXStateConverter {
 
   private convertTransitions(transitions: TransitionElement[], context: ConversionContext): Record<string, XStateTransition | XStateTransition[]> {
     const events: Record<string, XStateTransition[]> = {};
+    const automaticTransitions: XStateTransition[] = [];
 
     for (const transition of transitions) {
-      const event = transition.event || '*';
       const xstateTransition: XStateTransition = {};
 
       if (transition.target) {
@@ -247,7 +250,8 @@ export class SCXMLToXStateConverter {
 
       if (transition.cond) {
         const guardId = `guard_${this.generateId()}`;
-        context.guards.set(guardId, transition.cond);
+        const guardFunction = this.expressionParser.parseGuard(transition.cond);
+        context.guards.set(guardId, guardFunction);
         xstateTransition.guard = guardId;
       }
 
@@ -261,10 +265,10 @@ export class SCXMLToXStateConverter {
       }
       if (transition.assign) {
         for (const assign of transition.assign) {
-          actions.push({
-            type: 'assign',
-            assignment: { [assign.location]: assign.expr }
-          });
+          const actionId = `assign_${this.generateId()}`;
+          const assignFunction = this.expressionParser.parseAssignment(assign.location, assign.expr);
+          context.actions.set(actionId, assignFunction);
+          actions.push(actionId);
         }
       }
       if (transition.send) {
@@ -279,10 +283,10 @@ export class SCXMLToXStateConverter {
       }
       if (transition.log) {
         for (const log of transition.log) {
-          actions.push({
-            type: 'log',
-            message: log.expr || log.label
-          });
+          const actionId = `log_${this.generateId()}`;
+          const logFunction = this.expressionParser.parseLogExpression(log.expr, log.label);
+          context.actions.set(actionId, logFunction);
+          actions.push(actionId);
         }
       }
 
@@ -290,15 +294,29 @@ export class SCXMLToXStateConverter {
         xstateTransition.actions = actions;
       }
 
-      if (!events[event]) {
-        events[event] = [];
+      // Handle automatic transitions (no event) vs event-based transitions
+      if (transition.event) {
+        const event = transition.event;
+        if (!events[event]) {
+          events[event] = [];
+        }
+        events[event].push(xstateTransition);
+      } else {
+        // Automatic transition - use 'always' in XState
+        automaticTransitions.push(xstateTransition);
       }
-      events[event].push(xstateTransition);
     }
 
     const result: Record<string, XStateTransition | XStateTransition[]> = {};
+
+    // Add event-based transitions
     for (const [event, transitionList] of Object.entries(events)) {
       result[event] = transitionList.length === 1 ? transitionList[0] : transitionList;
+    }
+
+    // Add automatic transitions
+    if (automaticTransitions.length > 0) {
+      result['always'] = automaticTransitions.length === 1 ? automaticTransitions[0] : automaticTransitions;
     }
 
     return result;
@@ -315,10 +333,10 @@ export class SCXMLToXStateConverter {
       }
       if (element.assign) {
         for (const assign of element.assign) {
-          actions.push({
-            type: 'assign',
-            assignment: { [assign.location]: assign.expr }
-          });
+          const actionId = `assign_${this.generateId()}`;
+          const assignFunction = this.expressionParser.parseAssignment(assign.location, assign.expr);
+          context.actions.set(actionId, assignFunction);
+          actions.push(actionId);
         }
       }
       if (element.send) {
@@ -333,10 +351,10 @@ export class SCXMLToXStateConverter {
       }
       if (element.log) {
         for (const log of element.log) {
-          actions.push({
-            type: 'log',
-            message: log.expr || log.label
-          });
+          const actionId = `log_${this.generateId()}`;
+          const logFunction = this.expressionParser.parseLogExpression(log.expr, log.label);
+          context.actions.set(actionId, logFunction);
+          actions.push(actionId);
         }
       }
       if (element.script) {
@@ -360,18 +378,11 @@ export class SCXMLToXStateConverter {
 
     for (const dataElement of data) {
       if (dataElement.expr) {
-        try {
-          const parsed = JSON.parse(dataElement.expr);
-          dataModel[dataElement.id] = parsed;
-        } catch {
-          dataModel[dataElement.id] = dataElement.expr;
-        }
+        const value = this.expressionParser.parseDataExpression(dataElement.expr);
+        dataModel[dataElement.id] = value;
       } else if (dataElement.content) {
-        try {
-          dataModel[dataElement.id] = JSON.parse(dataElement.content);
-        } catch {
-          dataModel[dataElement.id] = dataElement.content;
-        }
+        const value = this.expressionParser.parseDataExpression(dataElement.content);
+        dataModel[dataElement.id] = value;
       } else {
         dataModel[dataElement.id] = null;
       }

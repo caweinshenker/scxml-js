@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml name="fizzbuzz-working" version="1.0" datamodel="ecmascript" initial="init">
+
+  <datamodel>
+    <data id="counter" expr="1"/>
+    <data id="max" expr="20"/>
+  </datamodel>
+
+  <state id="init">
+    <onentry>
+      <assign location="counter" expr="1"/>
+      <log label="FizzBuzz" expr="max"/>
+    </onentry>
+    <transition target="check"/>
+  </state>
+
+  <state id="check">
+    <transition cond="counter % 15 === 0" target="fizzbuzz"/>
+    <transition cond="counter % 3 === 0" target="fizz"/>
+    <transition cond="counter % 5 === 0" target="buzz"/>
+    <transition target="number"/>
+  </state>
+
+  <state id="fizzbuzz">
+    <onentry>
+      <log label="FizzBuzz" expr="counter"/>
+    </onentry>
+    <transition target="increment"/>
+  </state>
+
+  <state id="fizz">
+    <onentry>
+      <log label="Fizz" expr="counter"/>
+    </onentry>
+    <transition target="increment"/>
+  </state>
+
+  <state id="buzz">
+    <onentry>
+      <log label="Buzz" expr="counter"/>
+    </onentry>
+    <transition target="increment"/>
+  </state>
+
+  <state id="number">
+    <onentry>
+      <log label="Number" expr="counter"/>
+    </onentry>
+    <transition target="increment"/>
+  </state>
+
+  <state id="increment">
+    <onentry>
+      <assign location="counter" expr="counter + 1"/>
+    </onentry>
+    <transition cond="counter > max" target="done"/>
+    <transition target="check"/>
+  </state>
+
+  <final id="done">
+    <onentry>
+      <log label="Complete" expr="max"/>
+    </onentry>
+  </final>
+
+</scxml>

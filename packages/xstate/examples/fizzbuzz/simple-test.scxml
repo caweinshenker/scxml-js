@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml name="simple-test" version="1.0" datamodel="ecmascript" initial="start">
+
+  <datamodel>
+    <data id="counter" expr="1"/>
+  </datamodel>
+
+  <state id="start">
+    <onentry>
+      <log label="Start" expr="counter"/>
+    </onentry>
+    <transition cond="counter > 0" target="next"/>
+  </state>
+
+  <state id="next">
+    <onentry>
+      <assign location="counter" expr="counter + 1"/>
+      <log label="Next" expr="counter"/>
+    </onentry>
+    <transition cond="counter > 3" target="done"/>
+    <transition target="next"/>
+  </state>
+
+  <final id="done">
+    <onentry>
+      <log label="Done" expr="counter"/>
+    </onentry>
+  </final>
+
+</scxml>
