@@ -1,5 +1,188 @@
-export interface SCXMLDocument {
-  scxml: SCXMLElement;
+// Forward declarations for circular dependencies
+class SCXMLModifier {};
+class SCXMLValidator {};
+class SCXMLSerializer {};
+class SCXMLParser {};
+
+import type { ValidationError } from './validator';
+import type { SerializationOptions } from './serializer';
+
+export class SCXMLDocument {
+  public scxml: SCXMLElement;
+  private _modifier?: SCXMLModifier;
+  private _validator?: SCXMLValidator;  
+  private _serializer?: SCXMLSerializer;
+
+  constructor(scxml: SCXMLElement) {
+    this.scxml = scxml;
+  }
+
+  private get modifier(): SCXMLModifier {
+    if (!this._modifier) {
+      // Import here to avoid circular dependency
+      const { SCXMLModifier } = require('./modifier');
+      this._modifier = new SCXMLModifier(this);
+    }
+    return this._modifier;
+  }
+
+  private get validator(): SCXMLValidator {
+    if (!this._validator) {
+      const { SCXMLValidator } = require('./validator');
+      this._validator = new SCXMLValidator();
+    }
+    return this._validator;
+  }
+
+  private get serializer(): SCXMLSerializer {
+    if (!this._serializer) {
+      const { SCXMLSerializer } = require('./serializer');
+      this._serializer = new SCXMLSerializer();
+    }
+    return this._serializer;
+  }
+
+  // Modification API
+  setName(name: string): this {
+    this.modifier.setName(name);
+    return this;
+  }
+
+  setInitial(initial: string): this {
+    this.modifier.setInitial(initial);
+    return this;
+  }
+
+  setDatamodel(datamodel: string): this {
+    this.modifier.setDatamodel(datamodel);
+    return this;
+  }
+
+  addState(state: StateElement): this {
+    this.modifier.addState(state);
+    return this;
+  }
+
+  removeState(stateId: string): this {
+    this.modifier.removeState(stateId);
+    return this;
+  }
+
+  updateState(stateId: string, updater: (state: StateElement) => StateElement): this {
+    this.modifier.updateState(stateId, updater);
+    return this;
+  }
+
+  findState(stateId: string): StateElement | undefined {
+    return this.modifier.findState(stateId);
+  }
+
+  addTransitionToState(stateId: string, transition: TransitionElement): this {
+    this.modifier.addTransitionToState(stateId, transition);
+    return this;
+  }
+
+  removeTransitionFromState(stateId: string, transitionIndex: number): this {
+    this.modifier.removeTransitionFromState(stateId, transitionIndex);
+    return this;
+  }
+
+  addParallel(parallel: ParallelElement): this {
+    this.modifier.addParallel(parallel);
+    return this;
+  }
+
+  removeParallel(parallelId: string): this {
+    this.modifier.removeParallel(parallelId);
+    return this;
+  }
+
+  addDataElement(data: DataElement): this {
+    this.modifier.addDataElement(data);
+    return this;
+  }
+
+  removeDataElement(dataId: string): this {
+    this.modifier.removeDataElement(dataId);
+    return this;
+  }
+
+  updateDataElement(dataId: string, updater: (data: DataElement) => DataElement): this {
+    this.modifier.updateDataElement(dataId, updater);
+    return this;
+  }
+
+  // NEW: Fragment insertion API
+  insertFragment(fragmentXml: string, targetStateId?: string): this {
+    this.modifier.insertFragment(fragmentXml, targetStateId);
+    return this;
+  }
+
+  // NEW: Convert state to parallel
+  convertToParallel(stateId: string): this {
+    this.modifier.convertToParallel(stateId);
+    return this;
+  }
+
+  // NEW: Add state to specific parent
+  addStateToParent(parentStateId: string, state: StateElement): this {
+    this.modifier.addStateToParent(parentStateId, state);
+    return this;
+  }
+
+  // Validation API
+  validate(): ValidationError[] {
+    return this.validator.validate(this);
+  }
+
+  isValid(): boolean {
+    return this.validate().length === 0;
+  }
+
+  // Serialization API
+  serialize(options?: SerializationOptions): string {
+    return this.serializer.serialize(this, options);
+  }
+
+  toXML(options?: SerializationOptions): string {
+    return this.serialize(options);
+  }
+
+  // Utility methods
+  clone(): SCXMLDocument {
+    return new SCXMLDocument(JSON.parse(JSON.stringify(this.scxml)));
+  }
+
+  getStateHierarchy(): string[] {
+    const hierarchy: string[] = [];
+    this._collectStateIds(this.scxml.state || [], hierarchy);
+    this._collectParallelIds(this.scxml.parallel || [], hierarchy);
+    return hierarchy;
+  }
+
+  private _collectStateIds(states: StateElement[], result: string[]): void {
+    for (const state of states) {
+      result.push(state.id);
+      if (state.state) {
+        this._collectStateIds(state.state, result);
+      }
+      if (state.parallel) {
+        this._collectParallelIds(state.parallel, result);
+      }
+    }
+  }
+
+  private _collectParallelIds(parallels: ParallelElement[], result: string[]): void {
+    for (const parallel of parallels) {
+      result.push(parallel.id);
+      if (parallel.state) {
+        this._collectStateIds(parallel.state, result);
+      }
+      if (parallel.parallel) {
+        this._collectParallelIds(parallel.parallel, result);
+      }
+    }
+  }
 }
 
 export interface SCXMLElement {

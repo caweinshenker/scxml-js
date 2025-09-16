@@ -93,7 +93,8 @@ export class SCXMLBuilder {
   }
 
   build(): SCXMLDocument {
-    return JSON.parse(JSON.stringify(this.document));
+    const SCXMLDocument = require('./types').SCXMLDocument;
+    return new SCXMLDocument(JSON.parse(JSON.stringify(this.document.scxml)));
   }
 }
 

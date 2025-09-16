@@ -250,6 +250,8 @@ export const SCXML = {
    * modifier.addState(SCXML.state('new-state').build());
    * const modified = modifier.getDocument();
    * ```
+   * 
+   * @deprecated Use document.addState(), document.insertFragment(), etc. directly instead
    */
   modify: (document: any) => SCXMLModifier.from(document),
 

@@ -207,9 +207,9 @@ export class SCXMLParser {
     const scxmlData = scxmlElement.scxml;
     const scxmlAttributes = scxmlElement[":@"] || {};
 
-    return {
-      scxml: this.parseScxmlElement(scxmlData, scxmlAttributes),
-    };
+    return new (require('./types').SCXMLDocument)(
+      this.parseScxmlElement(scxmlData, scxmlAttributes)
+    );
   }
 
   private getAttributeValue(attributes: any, key: string): string | undefined {

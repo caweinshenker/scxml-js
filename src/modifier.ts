@@ -12,12 +12,75 @@ import {
   InvokeElement,
   HistoryElement,
 } from "./types";
+import { SCXMLValidator, ValidationError } from "./validator";
 
 export class SCXMLModifier {
   private document: SCXMLDocument;
+  private validator: SCXMLValidator;
+  private validateOnModify: boolean;
 
-  constructor(document: SCXMLDocument) {
+  constructor(document: SCXMLDocument, validateOnModify: boolean = true) {
     this.document = JSON.parse(JSON.stringify(document));
+    this.validator = new SCXMLValidator();
+    this.validateOnModify = validateOnModify;
+    
+    // Validate the initial document
+    if (this.validateOnModify) {
+      this.validateDocument("Initial document is invalid");
+    }
+  }
+
+  /**
+   * Validate the current document and throw an error if invalid
+   */
+  private validateDocument(errorPrefix: string = "Document validation failed"): void {
+    const errors = this.validator.validate(this.document);
+    if (errors.length > 0) {
+      const errorMessages = errors.map(e => `${e.path}: ${e.message}`).join('; ');
+      throw new Error(`${errorPrefix}: ${errorMessages}`);
+    }
+  }
+
+  /**
+   * Execute a modification function with validation
+   */
+  private withValidation<T>(operation: () => T, operationName: string): T {
+    if (!this.validateOnModify) {
+      return operation();
+    }
+
+    // Create a backup
+    const backup = JSON.parse(JSON.stringify(this.document));
+    
+    try {
+      const result = operation();
+      
+      // Validate after modification
+      this.validateDocument(`${operationName} resulted in invalid document`);
+      
+      return result;
+    } catch (error) {
+      // Restore backup on any error
+      this.document = backup;
+      throw error;
+    }
+  }
+
+  /**
+   * Disable validation for bulk operations (use with caution)
+   */
+  disableValidation(): this {
+    this.validateOnModify = false;
+    return this;
+  }
+
+  /**
+   * Re-enable validation and validate current state
+   */
+  enableValidation(): this {
+    this.validateOnModify = true;
+    this.validateDocument("Document state is invalid when enabling validation");
+    return this;
   }
 
   static from(document: SCXMLDocument): SCXMLModifier {
@@ -29,26 +92,34 @@ export class SCXMLModifier {
   }
 
   setName(name: string): this {
-    this.document.scxml.name = name;
-    return this;
+    return this.withValidation(() => {
+      this.document.scxml.name = name;
+      return this;
+    }, "setName");
   }
 
   setInitial(initial: string): this {
-    this.document.scxml.initial = initial;
-    return this;
+    return this.withValidation(() => {
+      this.document.scxml.initial = initial;
+      return this;
+    }, "setInitial");
   }
 
   setDatamodel(datamodel: string): this {
-    this.document.scxml.datamodel = datamodel;
-    return this;
+    return this.withValidation(() => {
+      this.document.scxml.datamodel = datamodel;
+      return this;
+    }, "setDatamodel");
   }
 
   addState(state: StateElement): this {
-    if (!this.document.scxml.state) {
-      this.document.scxml.state = [];
-    }
-    this.document.scxml.state.push(JSON.parse(JSON.stringify(state)));
-    return this;
+    return this.withValidation(() => {
+      if (!this.document.scxml.state) {
+        this.document.scxml.state = [];
+      }
+      this.document.scxml.state.push(JSON.parse(JSON.stringify(state)));
+      return this;
+    }, "addState");
   }
 
   removeState(stateId: string): this {
@@ -428,6 +499,185 @@ export class SCXMLModifier {
     }
 
     return ids;
+  }
+
+  /**
+   * Insert an arbitrary SCXML fragment at a specific location in the document.
+   * The fragment will be parsed and validated before insertion.
+   * 
+   * @param fragmentXml - XML string containing SCXML elements to insert
+   * @param targetStateId - Optional state ID to insert into. If not provided, inserts at root level
+   * @throws {Error} If fragment is invalid or target state doesn't exist
+   */
+  insertFragment(fragmentXml: string, targetStateId?: string): this {
+    return this.withValidation(() => {
+      // Parse the fragment using a minimal parser
+      const parser = new (require('./parser').SCXMLParser)();
+      
+      try {
+        // Try to parse as a complete SCXML document first
+        let fragmentDoc;
+        try {
+          fragmentDoc = parser.parse(`<scxml>${fragmentXml}</scxml>`);
+        } catch {
+          // If that fails, try as a standalone fragment
+          fragmentDoc = parser.parse(fragmentXml);
+        }
+
+        // Validate the parsed fragment
+        const fragmentErrors = this.validator.validate(fragmentDoc);
+        if (fragmentErrors.length > 0) {
+          const errorMessages = fragmentErrors.map(e => `${e.path}: ${e.message}`).join('; ');
+          throw new Error(`Fragment validation failed: ${errorMessages}`);
+        }
+
+        // Extract elements from the parsed fragment
+        const elements = this.extractElementsFromFragment(fragmentDoc);
+        
+        if (targetStateId) {
+          // Insert into specific state
+          const targetState = this.findState(targetStateId);
+          if (!targetState) {
+            throw new Error(`Target state '${targetStateId}' not found`);
+          }
+          this.insertElementsIntoState(targetState, elements);
+        } else {
+          // Insert at root level
+          this.insertElementsIntoRoot(elements);
+        }
+      } catch (error) {
+        throw new Error(`Failed to insert fragment: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+
+      return this;
+    }, "insertFragment");
+  }
+
+  /**
+   * Convert a regular state to a parallel state.
+   * This moves all child states into parallel regions.
+   */
+  convertToParallel(stateId: string): this {
+    return this.withValidation(() => {
+      const state = this.findState(stateId);
+      if (!state) {
+        throw new Error(`State '${stateId}' not found`);
+      }
+
+      // If state already has substates, convert them to parallel regions
+      if (state.state && state.state.length > 0) {
+        const childStates = [...state.state]; // Copy the array
+        
+        // Clear existing states
+        state.state = [];
+        
+        // Initialize parallel array if it doesn't exist
+        if (!state.parallel) {
+          state.parallel = [];
+        }
+
+        // Convert each child state to a parallel region
+        childStates.forEach((childState, index) => {
+          const parallelRegion: ParallelElement = {
+            id: `${stateId}_parallel_${index}`,
+            state: [childState]
+          };
+          state.parallel!.push(parallelRegion);
+        });
+      }
+
+      return this;
+    }, "convertToParallel");
+  }
+
+  /**
+   * Add a state to a specific parent state.
+   */
+  addStateToParent(parentStateId: string, state: StateElement): this {
+    return this.withValidation(() => {
+      const parentState = this.findState(parentStateId);
+      if (!parentState) {
+        throw new Error(`Parent state '${parentStateId}' not found`);
+      }
+
+      if (!parentState.state) {
+        parentState.state = [];
+      }
+      parentState.state.push(JSON.parse(JSON.stringify(state)));
+      return this;
+    }, "addStateToParent");
+  }
+
+  private extractElementsFromFragment(fragmentDoc: any): any {
+    // Extract various types of elements from the parsed fragment
+    const elements: any = {};
+    
+    if (fragmentDoc.scxml) {
+      const scxml = fragmentDoc.scxml;
+      if (scxml.state) elements.states = scxml.state;
+      if (scxml.parallel) elements.parallels = scxml.parallel;
+      if (scxml.final) elements.finals = scxml.final;
+      if (scxml.transition) elements.transitions = scxml.transition;
+      if (scxml.datamodel_element) elements.datamodel = scxml.datamodel_element;
+    }
+
+    // Handle direct elements (for fragments that aren't wrapped in <scxml>)
+    if (fragmentDoc.state) elements.states = Array.isArray(fragmentDoc.state) ? fragmentDoc.state : [fragmentDoc.state];
+    if (fragmentDoc.parallel) elements.parallels = Array.isArray(fragmentDoc.parallel) ? fragmentDoc.parallel : [fragmentDoc.parallel];
+    if (fragmentDoc.transition) elements.transitions = Array.isArray(fragmentDoc.transition) ? fragmentDoc.transition : [fragmentDoc.transition];
+    
+    return elements;
+  }
+
+  private insertElementsIntoState(targetState: StateElement, elements: any): void {
+    // Add states
+    if (elements.states) {
+      if (!targetState.state) targetState.state = [];
+      targetState.state.push(...elements.states);
+    }
+
+    // Add parallel regions
+    if (elements.parallels) {
+      if (!targetState.parallel) targetState.parallel = [];
+      targetState.parallel.push(...elements.parallels);
+    }
+
+    // Add transitions
+    if (elements.transitions) {
+      if (!targetState.transition) targetState.transition = [];
+      targetState.transition.push(...elements.transitions);
+    }
+
+    // Add final states
+    if (elements.finals) {
+      if (!targetState.final) targetState.final = [];
+      targetState.final.push(...elements.finals);
+    }
+  }
+
+  private insertElementsIntoRoot(elements: any): void {
+    // Add states to root
+    if (elements.states) {
+      if (!this.document.scxml.state) this.document.scxml.state = [];
+      this.document.scxml.state.push(...elements.states);
+    }
+
+    // Add parallel regions to root
+    if (elements.parallels) {
+      if (!this.document.scxml.parallel) this.document.scxml.parallel = [];
+      this.document.scxml.parallel.push(...elements.parallels);
+    }
+
+    // Add final states to root
+    if (elements.finals) {
+      if (!this.document.scxml.final) this.document.scxml.final = [];
+      this.document.scxml.final.push(...elements.finals);
+    }
+
+    // Handle datamodel
+    if (elements.datamodel) {
+      this.document.scxml.datamodel_element = elements.datamodel;
+    }
   }
 
   clone(): SCXMLModifier {
