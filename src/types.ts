@@ -132,11 +132,15 @@ export class SCXMLDocument {
 
   // NEW: Convert to parallel with named regions (enhanced)
   convertToParallelWithSubstates(
-    stateId: string, 
-    regionIds: string[], 
+    stateId: string,
+    regionIds: string[],
     distributeExistingStates: boolean = true
   ): this {
-    this.modifier.convertToParallelWithSubstates(stateId, regionIds, distributeExistingStates);
+    this.modifier.convertToParallelWithSubstates(
+      stateId,
+      regionIds,
+      distributeExistingStates
+    );
     return this;
   }
 
