@@ -128,14 +128,18 @@ export class SCXMLParser {
   /**
    * Parse SCXML with external reference resolution (async)
    */
-  async parseWithResolution(xmlString: string, filePath?: string, resolverOptions?: ResolverOptions): Promise<SCXMLDocument> {
+  async parseWithResolution(
+    xmlString: string,
+    filePath?: string,
+    resolverOptions?: ResolverOptions
+  ): Promise<SCXMLDocument> {
     this.currentPath = filePath;
 
     // Set up resolver if not already configured
     if (!this.resolver && resolverOptions) {
       this.resolver = new SCXMLModuleResolver({
         basePath: filePath ? filePath : undefined,
-        ...resolverOptions
+        ...resolverOptions,
       });
     }
 
@@ -207,7 +211,7 @@ export class SCXMLParser {
     const scxmlData = scxmlElement.scxml;
     const scxmlAttributes = scxmlElement[":@"] || {};
 
-    return new (require('./types').SCXMLDocument)(
+    return new (require("./types").SCXMLDocument)(
       this.parseScxmlElement(scxmlData, scxmlAttributes)
     );
   }
@@ -868,7 +872,9 @@ export class SCXMLParser {
   /**
    * Resolve external references in the parsed document
    */
-  private async resolveExternalReferences(document: SCXMLDocument): Promise<void> {
+  private async resolveExternalReferences(
+    document: SCXMLDocument
+  ): Promise<void> {
     if (!this.resolver) return;
 
     await this.resolveDocumentReferences(document.scxml);
@@ -877,7 +883,9 @@ export class SCXMLParser {
   /**
    * Recursively resolve external references in SCXML elements
    */
-  private async resolveDocumentReferences(element: SCXMLElement): Promise<void> {
+  private async resolveDocumentReferences(
+    element: SCXMLElement
+  ): Promise<void> {
     if (!this.resolver) return;
 
     // Resolve data model external sources
@@ -885,12 +893,21 @@ export class SCXMLParser {
       for (const data of element.datamodel_element.data) {
         if (data.src) {
           try {
-            const resolvedContent = await this.resolver.resolveData(data.src, this.currentPath);
-            data.content = typeof resolvedContent === 'string' ? resolvedContent : JSON.stringify(resolvedContent);
+            const resolvedContent = await this.resolver.resolveData(
+              data.src,
+              this.currentPath
+            );
+            data.content =
+              typeof resolvedContent === "string"
+                ? resolvedContent
+                : JSON.stringify(resolvedContent);
             // Keep the src for reference but mark as resolved
             data.src = `[resolved]${data.src}`;
           } catch (error) {
-            console.warn(`Failed to resolve data source ${data.src}:`, error instanceof Error ? error.message : error);
+            console.warn(
+              `Failed to resolve data source ${data.src}:`,
+              error instanceof Error ? error.message : error
+            );
           }
         }
       }
@@ -919,17 +936,23 @@ export class SCXMLParser {
     // Resolve invoke elements
     if (state.invoke) {
       for (const invoke of state.invoke) {
-        if (invoke.src && invoke.type === 'scxml') {
+        if (invoke.src && invoke.type === "scxml") {
           try {
-            const subDocument = await this.resolver.resolveScxml(invoke.src, this.currentPath);
+            const subDocument = await this.resolver.resolveScxml(
+              invoke.src,
+              this.currentPath
+            );
             // Convert the sub-document to content format
             invoke.content = {
-              content: JSON.stringify(subDocument)
+              content: JSON.stringify(subDocument),
             };
             // Mark as resolved
             invoke.src = `[resolved]${invoke.src}`;
           } catch (error) {
-            console.warn(`Failed to resolve SCXML source ${invoke.src}:`, error instanceof Error ? error.message : error);
+            console.warn(
+              `Failed to resolve SCXML source ${invoke.src}:`,
+              error instanceof Error ? error.message : error
+            );
           }
         }
       }
@@ -940,11 +963,20 @@ export class SCXMLParser {
       for (const data of state.datamodel.data) {
         if (data.src) {
           try {
-            const resolvedContent = await this.resolver.resolveData(data.src, this.currentPath);
-            data.content = typeof resolvedContent === 'string' ? resolvedContent : JSON.stringify(resolvedContent);
+            const resolvedContent = await this.resolver.resolveData(
+              data.src,
+              this.currentPath
+            );
+            data.content =
+              typeof resolvedContent === "string"
+                ? resolvedContent
+                : JSON.stringify(resolvedContent);
             data.src = `[resolved]${data.src}`;
           } catch (error) {
-            console.warn(`Failed to resolve data source ${data.src}:`, error instanceof Error ? error.message : error);
+            console.warn(
+              `Failed to resolve data source ${data.src}:`,
+              error instanceof Error ? error.message : error
+            );
           }
         }
       }
@@ -967,21 +999,29 @@ export class SCXMLParser {
   /**
    * Resolve external references in parallel elements
    */
-  private async resolveParallelReferences(parallel: ParallelElement): Promise<void> {
+  private async resolveParallelReferences(
+    parallel: ParallelElement
+  ): Promise<void> {
     if (!this.resolver) return;
 
     // Resolve invoke elements
     if (parallel.invoke) {
       for (const invoke of parallel.invoke) {
-        if (invoke.src && invoke.type === 'scxml') {
+        if (invoke.src && invoke.type === "scxml") {
           try {
-            const subDocument = await this.resolver.resolveScxml(invoke.src, this.currentPath);
+            const subDocument = await this.resolver.resolveScxml(
+              invoke.src,
+              this.currentPath
+            );
             invoke.content = {
-              content: JSON.stringify(subDocument)
+              content: JSON.stringify(subDocument),
             };
             invoke.src = `[resolved]${invoke.src}`;
           } catch (error) {
-            console.warn(`Failed to resolve SCXML source ${invoke.src}:`, error instanceof Error ? error.message : error);
+            console.warn(
+              `Failed to resolve SCXML source ${invoke.src}:`,
+              error instanceof Error ? error.message : error
+            );
           }
         }
       }
@@ -992,11 +1032,20 @@ export class SCXMLParser {
       for (const data of parallel.datamodel.data) {
         if (data.src) {
           try {
-            const resolvedContent = await this.resolver.resolveData(data.src, this.currentPath);
-            data.content = typeof resolvedContent === 'string' ? resolvedContent : JSON.stringify(resolvedContent);
+            const resolvedContent = await this.resolver.resolveData(
+              data.src,
+              this.currentPath
+            );
+            data.content =
+              typeof resolvedContent === "string"
+                ? resolvedContent
+                : JSON.stringify(resolvedContent);
             data.src = `[resolved]${data.src}`;
           } catch (error) {
-            console.warn(`Failed to resolve data source ${data.src}:`, error instanceof Error ? error.message : error);
+            console.warn(
+              `Failed to resolve data source ${data.src}:`,
+              error instanceof Error ? error.message : error
+            );
           }
         }
       }

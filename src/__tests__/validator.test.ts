@@ -1,4 +1,5 @@
 import { SCXMLValidator } from "../validator";
+import { SCXMLDocument } from "../types";
 import {
   SCXMLBuilder,
   StateBuilder,
@@ -56,11 +57,9 @@ describe("SCXML Validator", () => {
     });
 
     it("should reject states without ids", () => {
-      const doc = {
-        scxml: {
-          state: [{ id: "" }] as any,
-        },
-      };
+      const doc = new SCXMLDocument({
+        state: [{ id: "" }] as any,
+      });
 
       const errors = validator.validate(doc);
       expect(

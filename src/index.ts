@@ -35,21 +35,25 @@
  *
  * @group Types
  */
-export * from './types';
+export * from "./types";
 
 /**
  * XML parser for converting SCXML strings to document objects.
  *
  * @group Core
  */
-export { SCXMLParser } from './parser';
+export { SCXMLParser } from "./parser";
 
 /**
  * Module resolver for handling external SCXML references.
  *
  * @group Core
  */
-export { SCXMLModuleResolver, ResolverOptions, ResolvedContent } from './module-resolver';
+export {
+  SCXMLModuleResolver,
+  ResolverOptions,
+  ResolvedContent,
+} from "./module-resolver";
 
 /**
  * Fluent API builders for creating SCXML documents programmatically.
@@ -68,32 +72,32 @@ export {
   DataBuilder,
   InvokeBuilder,
   OnEntryBuilder,
-  OnExitBuilder
-} from './builder';
+  OnExitBuilder,
+} from "./builder";
 
 /**
  * API for programmatically modifying existing SCXML documents.
  *
  * @group Modifiers
  */
-export { SCXMLModifier } from './modifier';
+export { SCXMLModifier } from "./modifier";
 
 /**
  * Comprehensive validation for SCXML document structure and semantics.
  *
  * @group Validation
  */
-export { SCXMLValidator, ValidationError } from './validator';
+export { SCXMLValidator, ValidationError } from "./validator";
 
 /**
  * Convert SCXML documents back to XML strings with configurable formatting.
  *
  * @group Serialization
  */
-export { SCXMLSerializer, SerializationOptions } from './serializer';
+export { SCXMLSerializer, SerializationOptions } from "./serializer";
 
 // Import classes for use in SCXML utility object
-import { SCXMLParser } from './parser';
+import { SCXMLParser } from "./parser";
 import {
   SCXMLBuilder,
   StateBuilder,
@@ -103,11 +107,11 @@ import {
   DataBuilder,
   InvokeBuilder,
   OnEntryBuilder,
-  OnExitBuilder
-} from './builder';
-import { SCXMLModifier } from './modifier';
-import { SCXMLValidator } from './validator';
-import { SCXMLSerializer } from './serializer';
+  OnExitBuilder,
+} from "./builder";
+import { SCXMLModifier } from "./modifier";
+import { SCXMLValidator } from "./validator";
+import { SCXMLSerializer } from "./serializer";
 
 /**
  * Convenience object providing easy access to all SCXML operations.
@@ -250,7 +254,7 @@ export const SCXML = {
    * modifier.addState(SCXML.state('new-state').build());
    * const modified = modifier.getDocument();
    * ```
-   * 
+   *
    * @deprecated Use document.addState(), document.insertFragment(), etc. directly instead
    */
   modify: (document: any) => SCXMLModifier.from(document),
@@ -285,9 +289,9 @@ export const SCXML = {
    * const xml = SCXML.serialize(document, { spaces: 2 });
    * ```
    */
-  serialize: (document: any, options?: any) => new SCXMLSerializer(options).serialize(document),
-
+  serialize: (document: any, options?: any) =>
+    new SCXMLSerializer(options).serialize(document),
 };
 
 // Version
-export const VERSION = '0.1.0';
+export const VERSION = "0.1.0";

@@ -1,42 +1,36 @@
-// Forward declarations for circular dependencies
-class SCXMLModifier {};
-class SCXMLValidator {};
-class SCXMLSerializer {};
-class SCXMLParser {};
-
-import type { ValidationError } from './validator';
-import type { SerializationOptions } from './serializer';
+import type { ValidationError } from "./validator";
+import type { SerializationOptions } from "./serializer";
 
 export class SCXMLDocument {
   public scxml: SCXMLElement;
-  private _modifier?: SCXMLModifier;
-  private _validator?: SCXMLValidator;  
-  private _serializer?: SCXMLSerializer;
+  private _modifier?: any;
+  private _validator?: any;
+  private _serializer?: any;
 
   constructor(scxml: SCXMLElement) {
     this.scxml = scxml;
   }
 
-  private get modifier(): SCXMLModifier {
+  private get modifier(): any {
     if (!this._modifier) {
       // Import here to avoid circular dependency
-      const { SCXMLModifier } = require('./modifier');
+      const { SCXMLModifier } = require("./modifier");
       this._modifier = new SCXMLModifier(this);
     }
     return this._modifier;
   }
 
-  private get validator(): SCXMLValidator {
+  private get validator(): any {
     if (!this._validator) {
-      const { SCXMLValidator } = require('./validator');
+      const { SCXMLValidator } = require("./validator");
       this._validator = new SCXMLValidator();
     }
     return this._validator;
   }
 
-  private get serializer(): SCXMLSerializer {
+  private get serializer(): any {
     if (!this._serializer) {
-      const { SCXMLSerializer } = require('./serializer');
+      const { SCXMLSerializer } = require("./serializer");
       this._serializer = new SCXMLSerializer();
     }
     return this._serializer;
@@ -68,7 +62,10 @@ export class SCXMLDocument {
     return this;
   }
 
-  updateState(stateId: string, updater: (state: StateElement) => StateElement): this {
+  updateState(
+    stateId: string,
+    updater: (state: StateElement) => StateElement
+  ): this {
     this.modifier.updateState(stateId, updater);
     return this;
   }
@@ -107,7 +104,10 @@ export class SCXMLDocument {
     return this;
   }
 
-  updateDataElement(dataId: string, updater: (data: DataElement) => DataElement): this {
+  updateDataElement(
+    dataId: string,
+    updater: (data: DataElement) => DataElement
+  ): this {
     this.modifier.updateDataElement(dataId, updater);
     return this;
   }
@@ -148,6 +148,17 @@ export class SCXMLDocument {
     return this.serialize(options);
   }
 
+  // Validation control methods
+  disableValidation(): this {
+    this.modifier.disableValidation();
+    return this;
+  }
+
+  enableValidation(): this {
+    this.modifier.enableValidation();
+    return this;
+  }
+
   // Utility methods
   clone(): SCXMLDocument {
     return new SCXMLDocument(JSON.parse(JSON.stringify(this.scxml)));
@@ -172,7 +183,10 @@ export class SCXMLDocument {
     }
   }
 
-  private _collectParallelIds(parallels: ParallelElement[], result: string[]): void {
+  private _collectParallelIds(
+    parallels: ParallelElement[],
+    result: string[]
+  ): void {
     for (const parallel of parallels) {
       result.push(parallel.id);
       if (parallel.state) {
@@ -235,7 +249,7 @@ export interface TransitionElement {
   event?: string;
   cond?: string;
   target?: string;
-  type?: 'internal' | 'external';
+  type?: "internal" | "external";
   raise?: RaiseElement[];
   if?: IfElement[];
   foreach?: ForEachElement[];
@@ -270,7 +284,7 @@ export interface OnExitElement {
 
 export interface HistoryElement {
   id: string;
-  type: 'shallow' | 'deep';
+  type: "shallow" | "deep";
   transition?: TransitionElement;
 }
 
@@ -415,12 +429,12 @@ export interface ScriptElement {
   content?: string;
 }
 
-export type ExecutableContent = 
-  | RaiseElement 
-  | IfElement 
-  | ForEachElement 
-  | LogElement 
-  | AssignElement 
-  | SendElement 
-  | CancelElement 
+export type ExecutableContent =
+  | RaiseElement
+  | IfElement
+  | ForEachElement
+  | LogElement
+  | AssignElement
+  | SendElement
+  | CancelElement
   | ScriptElement;

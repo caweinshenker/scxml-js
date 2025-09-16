@@ -20,10 +20,10 @@ export class SCXMLModifier {
   private validateOnModify: boolean;
 
   constructor(document: SCXMLDocument, validateOnModify: boolean = true) {
-    this.document = JSON.parse(JSON.stringify(document));
+    this.document = document; // Don't copy - operate directly on the document
     this.validator = new SCXMLValidator();
     this.validateOnModify = validateOnModify;
-    
+
     // Validate the initial document
     if (this.validateOnModify) {
       this.validateDocument("Initial document is invalid");
@@ -33,10 +33,14 @@ export class SCXMLModifier {
   /**
    * Validate the current document and throw an error if invalid
    */
-  private validateDocument(errorPrefix: string = "Document validation failed"): void {
+  private validateDocument(
+    errorPrefix: string = "Document validation failed"
+  ): void {
     const errors = this.validator.validate(this.document);
     if (errors.length > 0) {
-      const errorMessages = errors.map(e => `${e.path}: ${e.message}`).join('; ');
+      const errorMessages = errors
+        .map((e) => `${e.path}: ${e.message}`)
+        .join("; ");
       throw new Error(`${errorPrefix}: ${errorMessages}`);
     }
   }
@@ -49,19 +53,19 @@ export class SCXMLModifier {
       return operation();
     }
 
-    // Create a backup
-    const backup = JSON.parse(JSON.stringify(this.document));
-    
+    // Create a backup of just the scxml content
+    const backup = JSON.parse(JSON.stringify(this.document.scxml));
+
     try {
       const result = operation();
-      
+
       // Validate after modification
       this.validateDocument(`${operationName} resulted in invalid document`);
-      
+
       return result;
     } catch (error) {
       // Restore backup on any error
-      this.document = backup;
+      this.document.scxml = backup;
       throw error;
     }
   }
@@ -504,7 +508,7 @@ export class SCXMLModifier {
   /**
    * Insert an arbitrary SCXML fragment at a specific location in the document.
    * The fragment will be parsed and validated before insertion.
-   * 
+   *
    * @param fragmentXml - XML string containing SCXML elements to insert
    * @param targetStateId - Optional state ID to insert into. If not provided, inserts at root level
    * @throws {Error} If fragment is invalid or target state doesn't exist
@@ -512,8 +516,8 @@ export class SCXMLModifier {
   insertFragment(fragmentXml: string, targetStateId?: string): this {
     return this.withValidation(() => {
       // Parse the fragment using a minimal parser
-      const parser = new (require('./parser').SCXMLParser)();
-      
+      const parser = new (require("./parser").SCXMLParser)();
+
       try {
         // Try to parse as a complete SCXML document first
         let fragmentDoc;
@@ -527,13 +531,15 @@ export class SCXMLModifier {
         // Validate the parsed fragment
         const fragmentErrors = this.validator.validate(fragmentDoc);
         if (fragmentErrors.length > 0) {
-          const errorMessages = fragmentErrors.map(e => `${e.path}: ${e.message}`).join('; ');
+          const errorMessages = fragmentErrors
+            .map((e) => `${e.path}: ${e.message}`)
+            .join("; ");
           throw new Error(`Fragment validation failed: ${errorMessages}`);
         }
 
         // Extract elements from the parsed fragment
         const elements = this.extractElementsFromFragment(fragmentDoc);
-        
+
         if (targetStateId) {
           // Insert into specific state
           const targetState = this.findState(targetStateId);
@@ -546,7 +552,11 @@ export class SCXMLModifier {
           this.insertElementsIntoRoot(elements);
         }
       } catch (error) {
-        throw new Error(`Failed to insert fragment: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        throw new Error(
+          `Failed to insert fragment: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
       }
 
       return this;
@@ -567,10 +577,10 @@ export class SCXMLModifier {
       // If state already has substates, convert them to parallel regions
       if (state.state && state.state.length > 0) {
         const childStates = [...state.state]; // Copy the array
-        
+
         // Clear existing states
         state.state = [];
-        
+
         // Initialize parallel array if it doesn't exist
         if (!state.parallel) {
           state.parallel = [];
@@ -580,7 +590,7 @@ export class SCXMLModifier {
         childStates.forEach((childState, index) => {
           const parallelRegion: ParallelElement = {
             id: `${stateId}_parallel_${index}`,
-            state: [childState]
+            state: [childState],
           };
           state.parallel!.push(parallelRegion);
         });
@@ -611,7 +621,7 @@ export class SCXMLModifier {
   private extractElementsFromFragment(fragmentDoc: any): any {
     // Extract various types of elements from the parsed fragment
     const elements: any = {};
-    
+
     if (fragmentDoc.scxml) {
       const scxml = fragmentDoc.scxml;
       if (scxml.state) elements.states = scxml.state;
@@ -622,14 +632,26 @@ export class SCXMLModifier {
     }
 
     // Handle direct elements (for fragments that aren't wrapped in <scxml>)
-    if (fragmentDoc.state) elements.states = Array.isArray(fragmentDoc.state) ? fragmentDoc.state : [fragmentDoc.state];
-    if (fragmentDoc.parallel) elements.parallels = Array.isArray(fragmentDoc.parallel) ? fragmentDoc.parallel : [fragmentDoc.parallel];
-    if (fragmentDoc.transition) elements.transitions = Array.isArray(fragmentDoc.transition) ? fragmentDoc.transition : [fragmentDoc.transition];
-    
+    if (fragmentDoc.state)
+      elements.states = Array.isArray(fragmentDoc.state)
+        ? fragmentDoc.state
+        : [fragmentDoc.state];
+    if (fragmentDoc.parallel)
+      elements.parallels = Array.isArray(fragmentDoc.parallel)
+        ? fragmentDoc.parallel
+        : [fragmentDoc.parallel];
+    if (fragmentDoc.transition)
+      elements.transitions = Array.isArray(fragmentDoc.transition)
+        ? fragmentDoc.transition
+        : [fragmentDoc.transition];
+
     return elements;
   }
 
-  private insertElementsIntoState(targetState: StateElement, elements: any): void {
+  private insertElementsIntoState(
+    targetState: StateElement,
+    elements: any
+  ): void {
     // Add states
     if (elements.states) {
       if (!targetState.state) targetState.state = [];

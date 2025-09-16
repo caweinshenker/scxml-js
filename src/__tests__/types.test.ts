@@ -3,25 +3,43 @@ import { SCXMLDocument, StateElement, ParallelElement, TransitionElement } from 
 describe('SCXML Types', () => {
   describe('SCXMLDocument', () => {
     it('should have proper structure for a basic document', () => {
-      const doc: SCXMLDocument = {
-        scxml: {
-          initial: 'idle',
-          state: [{
-            id: 'idle',
-            transition: [{
-              event: 'start',
-              target: 'active'
-            }]
-          }, {
-            id: 'active'
+      const doc = new SCXMLDocument({
+        initial: 'idle',
+        state: [{
+          id: 'idle',
+          transition: [{
+            event: 'start',
+            target: 'active'
           }]
-        }
-      };
+        }, {
+          id: 'active'
+        }]
+      });
 
       expect(doc.scxml.initial).toBe('idle');
       expect(doc.scxml.state).toHaveLength(2);
       expect(doc.scxml.state![0].id).toBe('idle');
       expect(doc.scxml.state![0].transition![0].event).toBe('start');
+    });
+
+    it('should provide manipulation methods', () => {
+      const doc = new SCXMLDocument({
+        initial: 'idle',
+        state: [{
+          id: 'idle'
+        }]
+      });
+
+      // Test that the methods exist and are chainable
+      expect(typeof doc.setName).toBe('function');
+      expect(typeof doc.addState).toBe('function');
+      expect(typeof doc.validate).toBe('function');
+      expect(typeof doc.serialize).toBe('function');
+      
+      // Test chaining
+      const result = doc.setName('test').setInitial('idle');
+      expect(result).toBe(doc);
+      expect(doc.scxml.name).toBe('test');
     });
   });
 

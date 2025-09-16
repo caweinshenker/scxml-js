@@ -21,18 +21,16 @@ import {
   ScriptElement,
   ParamElement,
   ContentElement,
-  DoneDataElement
-} from './types';
+  DoneDataElement,
+} from "./types";
 
 export class SCXMLBuilder {
-  private document: SCXMLDocument;
+  private scxml: SCXMLElement;
 
   constructor() {
-    this.document = {
-      scxml: {
-        version: '1.0',
-        xmlns: 'http://www.w3.org/2005/07/scxml'
-      }
+    this.scxml = {
+      version: "1.0",
+      xmlns: "http://www.w3.org/2005/07/scxml",
     };
   }
 
@@ -41,60 +39,60 @@ export class SCXMLBuilder {
   }
 
   name(name: string): this {
-    this.document.scxml.name = name;
+    this.scxml.name = name;
     return this;
   }
 
   initial(initial: string): this {
-    this.document.scxml.initial = initial;
+    this.scxml.initial = initial;
     return this;
   }
 
   datamodel(datamodel: string): this {
-    this.document.scxml.datamodel = datamodel;
+    this.scxml.datamodel = datamodel;
     return this;
   }
 
   addState(state: StateElement): this {
-    if (!this.document.scxml.state) {
-      this.document.scxml.state = [];
+    if (!this.scxml.state) {
+      this.scxml.state = [];
     }
-    this.document.scxml.state.push(state);
+    this.scxml.state.push(state);
     return this;
   }
 
   addParallel(parallel: ParallelElement): this {
-    if (!this.document.scxml.parallel) {
-      this.document.scxml.parallel = [];
+    if (!this.scxml.parallel) {
+      this.scxml.parallel = [];
     }
-    this.document.scxml.parallel.push(parallel);
+    this.scxml.parallel.push(parallel);
     return this;
   }
 
   addFinal(final: FinalElement): this {
-    if (!this.document.scxml.final) {
-      this.document.scxml.final = [];
+    if (!this.scxml.final) {
+      this.scxml.final = [];
     }
-    this.document.scxml.final.push(final);
+    this.scxml.final.push(final);
     return this;
   }
 
   addDataModel(dataModel: DataModelElement): this {
-    this.document.scxml.datamodel_element = dataModel;
+    this.scxml.datamodel_element = dataModel;
     return this;
   }
 
   addScript(script: ScriptElement): this {
-    if (!this.document.scxml.script) {
-      this.document.scxml.script = [];
+    if (!this.scxml.script) {
+      this.scxml.script = [];
     }
-    this.document.scxml.script.push(script);
+    this.scxml.script.push(script);
     return this;
   }
 
   build(): SCXMLDocument {
-    const SCXMLDocument = require('./types').SCXMLDocument;
-    return new SCXMLDocument(JSON.parse(JSON.stringify(this.document.scxml)));
+    const SCXMLDocument = require("./types").SCXMLDocument;
+    return new SCXMLDocument(JSON.parse(JSON.stringify(this.scxml)));
   }
 }
 
@@ -270,7 +268,7 @@ export class TransitionBuilder {
     return this;
   }
 
-  type(type: 'internal' | 'external'): this {
+  type(type: "internal" | "external"): this {
     this.transition.type = type;
     return this;
   }
