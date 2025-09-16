@@ -130,6 +130,16 @@ export class SCXMLDocument {
     return this;
   }
 
+  // NEW: Convert to parallel with named regions (enhanced)
+  convertToParallelWithSubstates(
+    stateId: string, 
+    regionIds: string[], 
+    distributeExistingStates: boolean = true
+  ): this {
+    this.modifier.convertToParallelWithSubstates(stateId, regionIds, distributeExistingStates);
+    return this;
+  }
+
   // Validation API
   validate(): ValidationError[] {
     return this.validator.validate(this);

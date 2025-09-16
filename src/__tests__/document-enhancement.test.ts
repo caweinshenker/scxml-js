@@ -149,6 +149,90 @@ describe('Enhanced SCXMLDocument Features', () => {
         document.convertToParallel('idle'); // No substates
       }).not.toThrow();
     });
+
+    it('should fail validation when converting single substate to parallel', () => {
+      // Create a fresh document for this test to avoid ID conflicts
+      const testDoc = new SCXMLDocument({
+        name: 'validation-test',
+        initial: 'test-state',
+        state: [{
+          id: 'test-state'
+        }]
+      });
+      
+      // Add only one substate to test validation failure
+      testDoc.addStateToParent('test-state', { id: 'single-sub' });
+      
+      expect(() => {
+        testDoc.convertToParallel('test-state'); // Single substate should fail validation
+      }).toThrow(/Parallel element must contain at least two child states/);
+    });
+
+    it('should create valid parallel structure when converting single state with enhancement', () => {
+      // Create a fresh document for this test to avoid ID conflicts
+      const testDoc = new SCXMLDocument({
+        name: 'enhancement-test',
+        initial: 'target',
+        state: [{
+          id: 'target'
+        }]
+      });
+      
+      // Test the enhanced conversion that creates valid parallel structure
+      testDoc.disableValidation(); // Temporarily disable to set up test
+      testDoc.addStateToParent('target', { id: 'single-sub' });
+      testDoc.enableValidation();
+      
+      // This should work with the enhanced conversion method
+      testDoc.convertToParallelWithSubstates('target', ['region-a', 'region-b']);
+      
+      const targetState = testDoc.scxml.state!.find(s => s.id === 'target');
+      expect(targetState?.parallel).toHaveLength(2);
+      expect(targetState?.parallel![0].id).toBe('region-a');
+      expect(targetState?.parallel![1].id).toBe('region-b');
+      
+      // Each parallel region should have at least 2 states for validation
+      expect(targetState?.parallel![0].state!.length).toBeGreaterThanOrEqual(2);
+      expect(targetState?.parallel![1].state!.length).toBeGreaterThanOrEqual(2);
+      
+      // Original substate should be preserved in the first region (round-robin distribution)
+      expect(targetState?.parallel![0].state![0].id).toBe('single-sub');
+      // Additional state should be added to meet validation requirements
+      expect(targetState?.parallel![0].state![1].id).toBe('region-a_additional');
+    });
+
+    it('should distribute multiple existing states across parallel regions', () => {
+      // Create a fresh document for this test to avoid ID conflicts
+      const testDoc = new SCXMLDocument({
+        name: 'distribution-test',
+        initial: 'parent',
+        state: [{
+          id: 'parent'
+        }]
+      });
+      
+      // Add multiple substates
+      testDoc.disableValidation();
+      testDoc.addStateToParent('parent', { id: 'sub1' });
+      testDoc.addStateToParent('parent', { id: 'sub2' });
+      testDoc.addStateToParent('parent', { id: 'sub3' });
+      testDoc.addStateToParent('parent', { id: 'sub4' });
+      testDoc.enableValidation();
+      
+      // Convert with enhanced method
+      testDoc.convertToParallelWithSubstates('parent', ['region-x', 'region-y']);
+      
+      const parentState = testDoc.scxml.state!.find(s => s.id === 'parent');
+      expect(parentState?.parallel).toHaveLength(2);
+      
+      // States should be distributed round-robin: region-x gets sub1,sub3; region-y gets sub2,sub4
+      expect(parentState?.parallel![0].state!.length).toBe(2);
+      expect(parentState?.parallel![1].state!.length).toBe(2);
+      expect(parentState?.parallel![0].state![0].id).toBe('sub1');
+      expect(parentState?.parallel![0].state![1].id).toBe('sub3');
+      expect(parentState?.parallel![1].state![0].id).toBe('sub2');
+      expect(parentState?.parallel![1].state![1].id).toBe('sub4');
+    });
   });
 
   describe('Hierarchical State Management', () => {

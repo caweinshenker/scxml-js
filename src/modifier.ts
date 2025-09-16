@@ -618,6 +618,76 @@ export class SCXMLModifier {
     }, "addStateToParent");
   }
 
+  /**
+   * Convert a state to parallel with named regions, creating valid parallel structure.
+   * This method ensures the resulting parallel state meets validation requirements.
+   * 
+   * @param stateId - ID of the state to convert
+   * @param regionIds - Array of parallel region IDs to create (must be at least 2)
+   * @param distributeExistingStates - Whether to distribute existing substates across regions
+   */
+  convertToParallelWithSubstates(
+    stateId: string, 
+    regionIds: string[], 
+    distributeExistingStates: boolean = true
+  ): this {
+    return this.withValidation(() => {
+      if (regionIds.length < 2) {
+        throw new Error(`At least 2 parallel regions required, got ${regionIds.length}`);
+      }
+
+      const state = this.findState(stateId);
+      if (!state) {
+        throw new Error(`State '${stateId}' not found`);
+      }
+
+      // Collect existing substates
+      const existingStates = state.state ? [...state.state] : [];
+      
+      // Clear existing states
+      state.state = [];
+      
+      // Initialize parallel array
+      if (!state.parallel) {
+        state.parallel = [];
+      }
+
+      // Create parallel regions
+      for (let i = 0; i < regionIds.length; i++) {
+        const regionId = regionIds[i];
+        const parallelRegion: ParallelElement = {
+          id: regionId,
+          state: []
+        };
+
+        // Distribute existing states across regions if requested
+        if (distributeExistingStates && existingStates.length > 0) {
+          // Simple round-robin distribution
+          const statesForThisRegion = existingStates.filter((_, index) => index % regionIds.length === i);
+          parallelRegion.state = statesForThisRegion;
+        }
+
+        // Ensure each region has at least two states for validation (parallel requirement)
+        if (!parallelRegion.state || parallelRegion.state.length === 0) {
+          parallelRegion.state = [{
+            id: `${regionId}_state1`
+          }, {
+            id: `${regionId}_state2`
+          }];
+        } else if (parallelRegion.state.length === 1) {
+          // If only one state, add another to meet parallel validation requirements
+          parallelRegion.state.push({
+            id: `${regionId}_additional`
+          });
+        }
+
+        state.parallel.push(parallelRegion);
+      }
+
+      return this;
+    }, "convertToParallelWithSubstates");
+  }
+
   private extractElementsFromFragment(fragmentDoc: any): any {
     // Extract various types of elements from the parsed fragment
     const elements: any = {};
